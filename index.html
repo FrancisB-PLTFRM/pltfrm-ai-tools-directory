@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLTFRM Digital - Advertising | AI Directory</title>
+</head>
+<body>
+<!-- THE REGISTRY — a shared, live entry log -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --black: #FFFFFF;
+    --white: #0A0A0A;
+    --off-white: #0A0A0A;
+    --line: rgba(255,255,255,0.14);
+    --line-strong: rgba(255,255,255,0.22);
+    --gray-700: #C4C4C4;
+    --gray-500: #8C8C8C;
+    --gray-300: #3A3A3A;
+    --surface: rgba(255,255,255,0.055);
+    --surface-hover: rgba(255,255,255,0.09);
+    --field-bg: rgba(255,255,255,0.06);
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; }
+
+  #registry-root{
+    background: var(--off-white);
+    color: var(--black);
+    font-family: 'Inter', sans-serif;
+    min-height: 100%;
+    padding: 36px 20px 64px;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow: hidden;
+    color-scheme: dark;
+  }
+  #registry-root::before, #registry-root::after{
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(110px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  #registry-root::before{
+    width: 460px; height: 460px;
+    top: -140px; left: -120px;
+    background: rgba(255,255,255,0.10);
+  }
+  #registry-root::after{
+    width: 420px; height: 420px;
+    bottom: -160px; right: -100px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  #registry-inner{ width: 100%; max-width: 780px; position: relative; z-index: 1; }
+
+  /* ---------- Header ---------- */
+  .rg-header{
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line-strong);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .rg-header-text{ flex: 1 1 320px; min-width: 0; }
+  .rg-export-btn{
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    background: transparent;
+    color: var(--black);
+    border: 1px solid var(--black);
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all .12s ease;
+  }
+  .rg-export-btn:hover{ background: var(--black); color: var(--white); }
+  .rg-eyebrow{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin: 0 0 12px;
+  }
+  .rg-title{
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin: 0 0 8px;
+    color: var(--black);
+  }
+  .rg-sub{
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--gray-500);
+    margin: 0;
+    max-width: 480px;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .rg-toolbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 16px;
+    flex-wrap: wrap;
+  }
+  .rg-tabs{ display: flex; gap: 8px; }
+  .rg-tab-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    color: var(--black);
+    padding: 9px 15px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .rg-tab-btn:hover{ background: var(--surface-hover); }
+  .rg-tab-btn.active{
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+
+  .rg-new-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    background: var(--black);
+    color: var(--white);
+    border: 1px solid var(--black);
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity .12s ease;
+  }
+  .rg-new-btn:hover{ opacity: 0.82; }
+  .rg-new-btn:active{ opacity: 0.65; }
+
+  /* ---------- Sort / filter controls + bulk bar (glass strip) ---------- */
+  .rg-controls, .rg-bulk-bar{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: var(--surface);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .rg-bulk-bar{ justify-content: space-between; }
+  .rg-control-group{ display: flex; align-items: center; gap: 8px; }
+  .rg-control-group label{
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+  }
+  .rg-control-group select{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    background: var(--field-bg);
+    color: var(--black);
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 6px 9px;
+    cursor: pointer;
+    color-scheme: dark;
+  }
+  .rg-control-group select option{ background: #1a1a1a; color: #ffffff; }
+  .rg-control-group select:focus{ outline: none; border-color: var(--black); }
+  .rg-control-group select:hover{ border-color: var(--black); }
+  .rg-control-group input[type="number"]{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    background: var(--field-bg);
+    color: var(--black);
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 6px 9px;
+    width: 64px;
+  }
+  .rg-control-group input[type="number"]:focus{ outline: none; border-color: var(--black); }
+  .rg-search-group{ flex: 1 1 240px; }
+  .rg-search-group input[type="text"]{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    background: var(--field-bg);
+    color: var(--black);
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 6px 10px;
+    flex: 1;
+    min-width: 120px;
+  }
+  .rg-search-group input[type="text"]:focus{ outline: none; border-color: var(--black); }
+  .rg-search-group select{ flex-shrink: 0; }
+  .rg-view-toggle{ display: flex; gap: 4px; }
+  .rg-view-btn{
+    width: 32px; height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gray-300);
+    background: transparent;
+    color: var(--gray-500);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .12s ease;
+  }
+  .rg-view-btn svg{ width: 15px; height: 15px; }
+  .rg-view-btn:hover{ border-color: var(--black); color: var(--black); }
+  .rg-view-btn.active{ background: var(--black); border-color: var(--black); color: var(--white); }
+
+  .rg-select-all{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--gray-700);
+    cursor: pointer;
+    user-select: none;
+  }
+  .rg-select-all input{ accent-color: var(--black); width: 15px; height: 15px; cursor: pointer; }
+  .rg-bulk-actions{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .rg-bulk-count{ font-size: 12.5px; color: var(--gray-500); }
+  .rg-bulk-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--black);
+    background: transparent;
+    color: var(--black);
+  }
+  .rg-bulk-btn:hover{ background: var(--black); color: var(--white); }
+  .rg-bulk-btn.primary{ background: var(--black); color: var(--white); }
+  .rg-bulk-btn.primary:hover{ opacity: 0.82; }
+
+  /* ---------- Card list ---------- */
+  .rg-list{ display: flex; flex-direction: column; gap: 10px; }
+  .rg-list.grid-view{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .rg-list.grid-view .rg-card{ height: 100%; display: flex; flex-direction: column; }
+  .rg-list.grid-view .rg-card-bottom{ margin-top: auto; }
+  @media (max-width: 700px){
+    .rg-list.grid-view{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 480px){
+    .rg-list.grid-view{ grid-template-columns: 1fr; }
+  }
+
+  .rg-card{
+    background: var(--surface);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    color: var(--black);
+    position: relative;
+    padding: 16px 18px 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    transition: box-shadow .15s ease, border-color .15s ease;
+  }
+  .rg-card:hover{ box-shadow: 0 10px 34px rgba(0,0,0,0.35); border-color: var(--line-strong); }
+  .rg-card.removed{ border-color: rgba(255,255,255,0.08); color: var(--gray-500); background: rgba(255,255,255,0.02); }
+  .rg-card.removed:hover{ box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+  .rg-card.removed .rg-card-title{ color: var(--gray-700); }
+
+  .rg-card-top{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .rg-card-check-wrap{ display: flex; align-items: center; padding-top: 3px; }
+  .rg-card-check{ accent-color: var(--black); width: 16px; height: 16px; cursor: pointer; }
+  .rg-card-title{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--black);
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    row-gap: 4px;
+  }
+  .rg-chip{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.01em;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    line-height: 1.5;
+  }
+  .rg-chip-dept{
+    background: var(--black);
+    color: var(--white);
+  }
+  .rg-card.removed .rg-chip-dept{ background: var(--gray-300); color: var(--gray-700); }
+  .rg-chip-ai{
+    background: transparent;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-700);
+    font-weight: 500;
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+  .rg-card.removed .rg-chip-ai{ border-color: rgba(255,255,255,0.1); }
+  .rg-chip-outline{
+    background: transparent;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-700);
+    font-weight: 500;
+  }
+  .rg-tag-row{ display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0 26px; }
+
+  .rg-card-desc{
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--gray-700);
+    margin: 10px 0 2px;
+  }
+  .rg-card-desc ul, .rg-card-desc ol{ margin: 4px 0; padding-left: 20px; }
+  .rg-card-desc li{ margin: 2px 0; }
+  .rg-card-desc.clamped{
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 128px;
+  }
+  .rg-desc-toggle{
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 4px 0 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--black);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .rg-desc-toggle.visible{ display: inline-block; }
+
+  .rg-card-poc{
+    font-size: 12.5px;
+    color: var(--gray-700);
+    margin: 0 0 8px;
+  }
+  .rg-card-poc-label{
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-right: 6px;
+  }
+
+  .rg-card-link-row{ display: flex; align-items: center; margin-bottom: 8px; }
+  .rg-card-link-row a{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    background: var(--black);
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .rg-card-link-row a:hover{ opacity: 0.8; }
+
+  .rg-card-bottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .rg-stamp{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--gray-500);
+    display: inline-block;
+  }
+  .rg-actions{ display: flex; gap: 6px; }
+  .rg-icon-btn{
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--black);
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .12s ease;
+  }
+  .rg-icon-btn:hover{ background: var(--black); color: var(--white); border-color: var(--black); }
+  .rg-icon-btn svg{ width: 14px; height: 14px; }
+
+  /* ---------- Empty state ---------- */
+  /* ---------- Pagination ---------- */
+  .rg-list-footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .rg-pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .rg-page-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--black);
+    background: transparent;
+    color: var(--black);
+  }
+  .rg-page-btn:hover:not(:disabled){ background: var(--black); color: var(--white); }
+  .rg-page-btn:disabled{ opacity: 0.3; cursor: default; }
+  .rg-page-info{ font-size: 12.5px; color: var(--gray-500); }
+
+  .rg-empty{
+    text-align: center;
+    padding: 52px 20px;
+    border: 1px dashed var(--gray-300);
+    border-radius: var(--radius-lg);
+    color: var(--gray-500);
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .rg-empty-title{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--black);
+    margin: 0 0 6px;
+  }
+  .rg-empty p{ margin: 0; font-size: 13.5px; }
+
+  /* ---------- Modal ---------- */
+  .rg-modal-overlay{
+    position: fixed; inset: 0;
+    background: rgba(6,6,6,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .rg-modal{
+    background: rgba(20,20,20,0.72);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    color: var(--black);
+    width: 100%; max-width: 460px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    padding: 24px 24px 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    margin: auto;
+  }
+  .rg-modal-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .rg-modal h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .rg-modal-close{
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--black);
+    background: var(--black);
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity .12s ease;
+  }
+  .rg-modal-close:hover{ opacity: 0.82; }
+  .rg-modal-close svg{ width: 15px; height: 15px; }
+  .rg-field{ margin-bottom: 12px; }
+  .rg-field label{
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-bottom: 5px;
+  }
+  .rg-field input, .rg-field textarea, .rg-field select{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 11px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 8px;
+    background: var(--field-bg);
+    color: var(--black);
+    resize: vertical;
+    color-scheme: dark;
+  }
+  .rg-field select option{ background: #1a1a1a; color: #ffffff; }
+  .rg-field input:focus, .rg-field textarea:focus, .rg-field select:focus{
+    outline: none;
+    border-color: var(--black);
+  }
+  .rg-field-error{ font-size: 12px; color: var(--black); font-weight: 600; margin-top: 4px; }
+  .rg-modal-actions{ display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+  .rg-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--black);
+  }
+  .rg-btn.secondary{ background: transparent; color: var(--black); border-color: var(--line); }
+  .rg-btn.secondary:hover{ border-color: var(--black); }
+  .rg-btn.primary{ background: var(--black); color: var(--white); }
+  .rg-btn.primary:hover{ opacity: 0.82; }
+  .rg-btn.danger{ background: var(--black); color: var(--white); }
+
+  /* ---------- Combo (select existing / add new) fields ---------- */
+  .rg-combo-new{ display: flex; gap: 6px; align-items: center; }
+  .rg-combo-new input{ flex: 1; }
+  .rg-combo-back{
+    font-size: 11px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    color: var(--gray-500);
+    text-decoration: underline;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 4px 2px;
+  }
+  .rg-combo-back:hover{ color: var(--black); }
+
+  /* ---------- Rich text toolbar for Description ---------- */
+  .rg-rte-toolbar{ display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .rg-rte-btn{
+    min-width: 30px; height: 30px;
+    padding: 0 8px;
+    border: 1px solid var(--gray-300);
+    background: transparent;
+    color: var(--black);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+  .rg-rte-btn:hover{ background: rgba(255,255,255,0.08); border-color: var(--black); }
+  .rg-rte-editor{
+    min-height: 84px;
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 9px 11px;
+    background: var(--field-bg);
+    color: var(--black);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .rg-rte-editor:focus{ outline: none; border-color: var(--black); }
+  .rg-rte-editor:empty:before{ content: attr(data-placeholder); color: var(--gray-500); }
+  .rg-rte-editor ul, .rg-rte-editor ol{ margin: 4px 0; padding-left: 22px; }
+  .rg-rte-editor li{ margin: 2px 0; }
+
+  .rg-toast{
+    position: fixed;
+    bottom: 22px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--black);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 20px;
+    border-radius: var(--radius);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .rg-toast.show{ opacity: 1; }
+
+  @media (max-width: 520px){
+    .rg-title{ font-size: 24px; }
+    .rg-toolbar{ flex-direction: column; align-items: stretch; }
+    .rg-new-btn{ justify-content: center; }
+    .rg-tag-row{ margin-left: 0; }
+  }
+</style>
+
+<div id="registry-root">
+  <div id="registry-inner">
+    <div class="rg-header">
+      <div class="rg-header-text">
+        <p class="rg-eyebrow">Shared &amp; live — everyone sees the same log</p>
+        <h1 class="rg-title">PLTFRM  Digital -  Advertising | AI Directory</h1>
+        <p class="rg-sub">Directory of PLTFRM Digital's Advertising AI Tools</p>
+      </div>
+      <button type="button" class="rg-export-btn" id="rg-export-btn" title="Download an updated copy of this dashboard, with your current entries baked in, ready to upload to GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+    </div>
+
+    <div class="rg-toolbar">
+      <div class="rg-tabs">
+        <button class="rg-tab-btn active" id="rg-tab-active" data-tab="active">ENTRIES (<span id="rg-count-active">0</span>)</button>
+        <button class="rg-tab-btn" id="rg-tab-removed" data-tab="removed">ARCHIVE (<span id="rg-count-removed">0</span>)</button>
+      </div>
+      <button class="rg-new-btn" id="rg-new-entry-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New entry
+      </button>
+    </div>
+
+    <div class="rg-controls">
+      <div class="rg-control-group rg-search-group">
+        <label for="rg-search-input">Search</label>
+        <input type="text" id="rg-search-input" placeholder="Search…">
+        <select id="rg-search-field">
+          <option value="title" selected>Title</option>
+          <option value="description">Description</option>
+          <option value="department">Department</option>
+        </select>
+      </div>
+      <div class="rg-control-group">
+        <label for="rg-sort-select">Sort</label>
+        <select id="rg-sort-select">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="title-asc">Title A–Z</option>
+          <option value="title-desc">Title Z–A</option>
+          <option value="dept-asc">Department A–Z</option>
+        </select>
+      </div>
+      <div class="rg-control-group">
+        <label for="rg-dept-select">Department</label>
+        <select id="rg-dept-select">
+          <option value="all">All departments</option>
+        </select>
+      </div>
+      <div class="rg-control-group rg-view-toggle-group">
+        <label>View</label>
+        <div class="rg-view-toggle">
+          <button type="button" class="rg-view-btn active" id="rg-view-list" aria-label="List view" title="List view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+          <button type="button" class="rg-view-btn" id="rg-view-grid" aria-label="Grid view" title="Grid view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rg-bulk-bar">
+      <label class="rg-select-all">
+        <input type="checkbox" id="rg-select-all-checkbox">
+        <span id="rg-select-all-label">Select all visible</span>
+      </label>
+      <div class="rg-bulk-actions" id="rg-bulk-actions"></div>
+    </div>
+
+    <div class="rg-list" id="rg-list"></div>
+    <div class="rg-list-footer" id="rg-list-footer">
+      <div class="rg-control-group" id="rg-pagesize-group">
+        <label for="rg-pagesize-input">Show</label>
+        <input type="number" id="rg-pagesize-input" min="1" max="500" value="5">
+      </div>
+      <div class="rg-pagination" id="rg-pagination"></div>
+    </div>
+  </div>
+</div>
+
+<div id="rg-toast" class="rg-toast"></div>
+
+<script>
+(function(){
+  // Captured immediately, before any rendering happens, so an exported copy
+  // reflects the original pristine markup/script plus the current entries.
+  const SELF_SCRIPT_TAG = document.currentScript;
+  const PRISTINE_STYLE_HTML = document.querySelector('style') ? document.querySelector('style').outerHTML : '';
+  const PRISTINE_ROOT_HTML = document.getElementById('registry-root').outerHTML;
+  const PRISTINE_TOAST_HTML = document.getElementById('rg-toast').outerHTML;
+
+  // Seed data baked into the file. Left empty here; the Export button below
+  // regenerates a copy of this file with the current entries baked into this
+  // constant, so re-uploading it to GitHub preserves everyone's submissions
+  // as the new starting point.
+  const SEED_ENTRIES = [];
+
+  // Controls whether add/edit/archive/delete/bulk-select and the Archive tab
+  // are available. The Export button flips this to true in the downloaded
+  // copy, producing a read-only public view.
+  const READONLY_MODE = true;
+
+  const STORAGE_KEY = 'registry:entries';
+  let entries = [];
+  let currentTab = 'active';
+  let editingId = null;
+  let pollTimer = null;
+  let modalOpen = false;
+  let sortBy = 'newest';
+  let deptFilter = 'all';
+  const expandedIds = new Set();
+  const selectedIds = new Set();
+  let pendingDeleteIds = [];
+  let isSaving = false;
+  let viewMode = 'list';
+  let listPageSize = 5;
+  let currentPage = 1;
+  let lastPagedIds = [];
+  const GRID_PAGE_SIZE = 12;
+  let searchQuery = '';
+  let searchField = 'title';
+
+  const listEl = document.getElementById('rg-list');
+  const countActiveEl = document.getElementById('rg-count-active');
+  const countRemovedEl = document.getElementById('rg-count-removed');
+  const toastEl = document.getElementById('rg-toast');
+  const sortSelectEl = document.getElementById('rg-sort-select');
+  const deptSelectEl = document.getElementById('rg-dept-select');
+  const pageSizeInputEl = document.getElementById('rg-pagesize-input');
+  const paginationEl = document.getElementById('rg-pagination');
+  const searchInputEl = document.getElementById('rg-search-input');
+  const searchFieldEl = document.getElementById('rg-search-field');
+
+  function resetPage(){ currentPage = 1; }
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastEl._t);
+    toastEl._t = setTimeout(()=> toastEl.classList.remove('show'), 2200);
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function normalizeUrl(url){
+    if(!url) return '';
+    if(!/^https?:\/\//i.test(url)) return 'https://' + url;
+    return url;
+  }
+
+  function formatDate(ts){
+    if(!ts) return '';
+    const d = new Date(ts);
+    return d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+  }
+
+  // ---------- HTML sanitizer for the rich-text Description field ----------
+  const RTE_ALLOWED_TAGS = { B:1, STRONG:1, I:1, EM:1, U:1, S:1, STRIKE:1, UL:1, OL:1, LI:1, BR:1, DIV:1, P:1, SPAN:1 };
+
+  function sanitizeRichHtml(html){
+    const root = document.createElement('div');
+    root.innerHTML = html || '';
+    const stack = [root];
+    while(stack.length){
+      const node = stack.pop();
+      const children = Array.from(node.childNodes);
+      for(const child of children){
+        if(child.nodeType === 1){
+          if(!RTE_ALLOWED_TAGS[child.tagName]){
+            while(child.firstChild){ node.insertBefore(child.firstChild, child); }
+            node.removeChild(child);
+            stack.push(node);
+          } else {
+            Array.from(child.attributes).forEach(attr => {
+              if(child.tagName === 'SPAN' && attr.name === 'style'){
+                const m = /font-size:\s*\d+(?:\.\d+)?px/i.exec(attr.value);
+                if(m){ child.setAttribute('style', m[0]); } else { child.removeAttribute('style'); }
+              } else {
+                child.removeAttribute(attr.name);
+              }
+            });
+            stack.push(child);
+          }
+        } else if(child.nodeType !== 3){
+          node.removeChild(child);
+        }
+      }
+    }
+    return root.innerHTML.trim();
+  }
+
+  function htmlIsBlank(html){
+    const d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').trim().length === 0;
+  }
+
+  function plainText(html){
+    const d = document.createElement('div');
+    d.innerHTML = html || '';
+    return d.textContent || '';
+  }
+
+  function distinctFieldValues(field){
+    const seen = new Map();
+    entries.forEach(e => {
+      const v = (e[field] || '').trim();
+      if(v && !seen.has(v.toLowerCase())) seen.set(v.toLowerCase(), v);
+    });
+    return Array.from(seen.values()).sort((a,b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+  }
+
+  const hasClaudeStorage = typeof window.storage !== 'undefined';
+
+  async function loadEntries(){
+    let loaded = null;
+    try{
+      if(hasClaudeStorage){
+        const res = await window.storage.get(STORAGE_KEY, true);
+        loaded = res && res.value ? JSON.parse(res.value) : null;
+      } else {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        loaded = raw ? JSON.parse(raw) : null;
+      }
+    } catch(e){
+      loaded = null;
+    }
+    entries = loaded || JSON.parse(JSON.stringify(SEED_ENTRIES));
+    render();
+  }
+
+  async function saveEntries(){
+    isSaving = true;
+    const payload = JSON.stringify(entries);
+    try{
+      if(hasClaudeStorage){
+        const attempt = async () => window.storage.set(STORAGE_KEY, payload, true);
+        let result = await attempt();
+        if(!result){ result = await attempt(); }
+        if(!result){ toast('Could not save — try again'); }
+      } else {
+        localStorage.setItem(STORAGE_KEY, payload);
+      }
+    } catch(e){
+      console.error('Storage save failed:', e);
+      toast('Storage error — try again');
+    } finally {
+      isSaving = false;
+    }
+  }
+
+  function sortList(list){
+    const sorted = list.slice();
+    if(sortBy === 'title-asc'){
+      sorted.sort((a,b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+    } else if(sortBy === 'title-desc'){
+      sorted.sort((a,b) => b.title.localeCompare(a.title, undefined, { sensitivity: 'base' }));
+    } else if(sortBy === 'dept-asc'){
+      sorted.sort((a,b) => (a.department||'').localeCompare(b.department||'', undefined, { sensitivity: 'base' }) || a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+    } else if(sortBy === 'oldest'){
+      sorted.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+    } else {
+      sorted.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    }
+    return sorted;
+  }
+
+  function populateDeptFilter(sourceList){
+    const depts = Array.from(new Set(sourceList.map(e => (e.department||'').trim()).filter(Boolean)))
+      .sort((a,b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    const prevValue = deptSelectEl.value || 'all';
+    deptSelectEl.innerHTML = '<option value="all">All departments</option>' +
+      depts.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+    deptSelectEl.value = depts.includes(prevValue) ? prevValue : 'all';
+    deptFilter = deptSelectEl.value;
+  }
+
+  function render(){
+    const active = entries.filter(e => e.status !== 'removed');
+    const removed = entries.filter(e => e.status === 'removed');
+    countActiveEl.textContent = active.length;
+    countRemovedEl.textContent = removed.length;
+
+    const baseList = currentTab === 'active' ? active : removed;
+    populateDeptFilter(baseList);
+
+    let list = deptFilter === 'all'
+      ? baseList
+      : baseList.filter(e => (e.department||'').trim() === deptFilter);
+
+    const query = searchQuery.trim().toLowerCase();
+    if(query){
+      list = list.filter(e => {
+        if(searchField === 'title') return (e.title||'').toLowerCase().includes(query);
+        if(searchField === 'department') return (e.department||'').toLowerCase().includes(query);
+        if(searchField === 'description') return plainText(e.description||'').toLowerCase().includes(query);
+        return true;
+      });
+    }
+
+    list = sortList(list);
+
+    listEl.className = 'rg-list' + (viewMode === 'grid' ? ' grid-view' : ' list-view');
+
+    const pageSize = viewMode === 'grid' ? GRID_PAGE_SIZE : Math.max(1, listPageSize);
+    const totalItems = list.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    if(currentPage > totalPages) currentPage = totalPages;
+    if(currentPage < 1) currentPage = 1;
+
+    if(totalItems === 0){
+      const deptFiltered = deptFilter !== 'all';
+      listEl.innerHTML = query
+        ? `<div class="rg-empty"><p class="rg-empty-title">No matches</p><p>Nothing matches "${escapeHtml(searchQuery.trim())}" in ${searchField}. Try a different term or field.</p></div>`
+        : (deptFiltered
+          ? `<div class="rg-empty"><p class="rg-empty-title">No entries in this department</p><p>Try a different department or switch back to "All departments".</p></div>`
+          : (currentTab === 'active'
+            ? `<div class="rg-empty"><p class="rg-empty-title">Nothing logged yet</p><p>Add the first entry to start the shared list.</p></div>`
+            : `<div class="rg-empty"><p class="rg-empty-title">The archive is empty</p><p>Removed entries will land here until they're restored or cleared for good.</p></div>`));
+      lastPagedIds = [];
+      updateBulkBar([]);
+      renderPagination(0, 1);
+      return;
+    }
+
+    const startIdx = (currentPage - 1) * pageSize;
+    const pagedList = list.slice(startIdx, startIdx + pageSize);
+    lastPagedIds = pagedList.map(e => e.id);
+
+    listEl.innerHTML = pagedList.map(e => renderCard(e)).join('');
+
+    pagedList.forEach(e => {
+      const card = document.getElementById('card-' + e.id);
+      if(!card) return;
+      if(!READONLY_MODE){
+        if(currentTab === 'active'){
+          card.querySelector('.rg-edit-btn').addEventListener('click', () => openModal(e.id));
+          card.querySelector('.rg-remove-btn').addEventListener('click', () => removeEntry(e.id));
+        } else {
+          card.querySelector('.rg-restore-btn').addEventListener('click', () => restoreEntry(e.id));
+          card.querySelector('.rg-delete-btn').addEventListener('click', () => confirmDeleteIds([e.id]));
+        }
+      }
+      const checkEl = card.querySelector('.rg-card-check');
+      if(checkEl){
+        checkEl.addEventListener('change', () => {
+          if(checkEl.checked){ selectedIds.add(e.id); } else { selectedIds.delete(e.id); }
+          updateBulkBar(pagedList);
+        });
+      }
+      const descEl = card.querySelector('.rg-card-desc');
+      const toggleEl = card.querySelector('.rg-desc-toggle');
+      if(descEl && toggleEl){
+        const isExpanded = expandedIds.has(e.id);
+        if(!isExpanded){
+          requestAnimationFrame(() => {
+            if(descEl.scrollHeight - descEl.clientHeight > 2){
+              toggleEl.classList.add('visible');
+            }
+          });
+        } else {
+          toggleEl.classList.add('visible');
+        }
+        toggleEl.addEventListener('click', () => {
+          if(expandedIds.has(e.id)){ expandedIds.delete(e.id); } else { expandedIds.add(e.id); }
+          render();
+        });
+      }
+    });
+
+    updateBulkBar(pagedList);
+    renderPagination(totalItems, totalPages);
+  }
+
+  function renderPagination(totalItems, totalPages){
+    if(totalItems === 0 || totalPages <= 1){
+      paginationEl.innerHTML = '';
+      return;
+    }
+    paginationEl.innerHTML = `
+      <button class="rg-page-btn" id="rg-page-prev" ${currentPage <= 1 ? 'disabled' : ''}>‹ Prev</button>
+      <span class="rg-page-info">Page ${currentPage} of ${totalPages}</span>
+      <button class="rg-page-btn" id="rg-page-next" ${currentPage >= totalPages ? 'disabled' : ''}>Next ›</button>`;
+    document.getElementById('rg-page-prev').addEventListener('click', () => {
+      if(currentPage > 1){ currentPage--; render(); }
+    });
+    document.getElementById('rg-page-next').addEventListener('click', () => {
+      if(currentPage < totalPages){ currentPage++; render(); }
+    });
+  }
+
+  function updateBulkBar(visibleList){
+    const visibleIds = visibleList.map(e => e.id);
+    const selectAllCheckbox = document.getElementById('rg-select-all-checkbox');
+    const selectAllLabel = document.getElementById('rg-select-all-label');
+    const actionsEl = document.getElementById('rg-bulk-actions');
+
+    const selectedVisibleCount = visibleIds.filter(id => selectedIds.has(id)).length;
+    selectAllCheckbox.checked = visibleIds.length > 0 && selectedVisibleCount === visibleIds.length;
+    selectAllCheckbox.indeterminate = selectedVisibleCount > 0 && selectedVisibleCount < visibleIds.length;
+    selectAllLabel.textContent = visibleIds.length > 0
+      ? `Select all visible (${visibleIds.length})`
+      : 'Select all visible';
+
+    const totalSelected = selectedIds.size;
+    if(totalSelected === 0){
+      actionsEl.innerHTML = `<span class="rg-bulk-count">No entries selected</span>`;
+      return;
+    }
+
+    const countLabel = `${totalSelected} selected`;
+    if(currentTab === 'active'){
+      actionsEl.innerHTML = `
+        <span class="rg-bulk-count">${countLabel}</span>
+        <button class="rg-bulk-btn primary" id="rg-bulk-archive">Archive selected</button>`;
+      document.getElementById('rg-bulk-archive').addEventListener('click', bulkArchive);
+    } else {
+      actionsEl.innerHTML = `
+        <span class="rg-bulk-count">${countLabel}</span>
+        <button class="rg-bulk-btn" id="rg-bulk-restore">Restore selected</button>
+        <button class="rg-bulk-btn primary" id="rg-bulk-delete">Delete forever</button>`;
+      document.getElementById('rg-bulk-restore').addEventListener('click', bulkRestore);
+      document.getElementById('rg-bulk-delete').addEventListener('click', () => confirmDeleteIds(Array.from(selectedIds)));
+    }
+  }
+
+  document.getElementById('rg-select-all-checkbox').addEventListener('change', function(){
+    if(this.checked){
+      lastPagedIds.forEach(id => selectedIds.add(id));
+    } else {
+      lastPagedIds.forEach(id => selectedIds.delete(id));
+    }
+    render();
+  });
+
+  sortSelectEl.addEventListener('change', () => { sortBy = sortSelectEl.value; resetPage(); render(); });
+  searchInputEl.addEventListener('input', () => { searchQuery = searchInputEl.value; resetPage(); render(); });
+  searchFieldEl.addEventListener('change', () => { searchField = searchFieldEl.value; resetPage(); render(); });
+  deptSelectEl.addEventListener('change', () => { deptFilter = deptSelectEl.value; resetPage(); render(); });
+
+  pageSizeInputEl.addEventListener('change', () => {
+    let val = parseInt(pageSizeInputEl.value, 10);
+    if(!Number.isFinite(val) || val < 1) val = 1;
+    listPageSize = val;
+    pageSizeInputEl.value = val;
+    resetPage();
+    render();
+  });
+
+  document.getElementById('rg-view-list').addEventListener('click', () => setViewMode('list'));
+  document.getElementById('rg-view-grid').addEventListener('click', () => setViewMode('grid'));
+
+  function setViewMode(mode){
+    if(viewMode === mode) return;
+    viewMode = mode;
+    resetPage();
+    document.getElementById('rg-view-list').classList.toggle('active', mode === 'list');
+    document.getElementById('rg-view-grid').classList.toggle('active', mode === 'grid');
+    document.getElementById('rg-pagesize-group').style.display = mode === 'list' ? 'flex' : 'none';
+    render();
+  }
+
+  function renderCard(e){
+    const safeTitle = escapeHtml(e.title);
+    const safeDept = escapeHtml((e.department || '').trim());
+    const safeBrand = escapeHtml((e.brand || '').trim());
+    const safeAiModel = escapeHtml((e.aiModel || '').trim());
+    const descHtml = e.description ? sanitizeRichHtml(e.description) : '';
+    const hasDesc = descHtml && !htmlIsBlank(descHtml);
+    const safeLink = e.link ? escapeHtml(normalizeUrl(e.link)) : '';
+    const safePoc = escapeHtml((e.pointOfContact || '').trim());
+    const stampLabel = e.status === 'removed'
+      ? 'removed ' + formatDate(e.removedAt)
+      : (e.updatedAt && e.updatedAt !== e.createdAt ? 'updated ' + formatDate(e.updatedAt) : 'added ' + formatDate(e.createdAt));
+
+    const actions = READONLY_MODE ? '' : (currentTab === 'active'
+      ? `<button class="rg-icon-btn rg-edit-btn" title="Edit entry" aria-label="Edit entry">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+         </button>
+         <button class="rg-icon-btn danger rg-remove-btn" title="Move to Archive" aria-label="Remove entry">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+         </button>`
+      : `<button class="rg-icon-btn ok rg-restore-btn" title="Restore entry" aria-label="Restore entry">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+         </button>
+         <button class="rg-icon-btn danger rg-delete-btn" title="Delete permanently" aria-label="Delete permanently">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+         </button>`);
+
+    return `
+      <div class="rg-card ${e.status === 'removed' ? 'removed' : ''}" id="card-${e.id}">
+        <div class="rg-card-top">
+          ${READONLY_MODE ? '' : `<div class="rg-card-check-wrap">
+            <input type="checkbox" class="rg-card-check" data-id="${e.id}" aria-label="Select entry"${selectedIds.has(e.id) ? ' checked' : ''}>
+          </div>`}
+          <h3 class="rg-card-title">${safeTitle}${safeDept ? `<span class="rg-chip rg-chip-dept">${safeDept}</span>` : ''}${safeAiModel ? `<span class="rg-chip rg-chip-ai">${safeAiModel}</span>` : ''}</h3>
+        </div>
+        ${safeBrand ? `<div class="rg-tag-row">
+          <span class="rg-chip rg-chip-outline">${safeBrand}</span>
+        </div>` : ''}
+        ${hasDesc ? `<div class="rg-card-desc${expandedIds.has(e.id) ? '' : ' clamped'}">${descHtml}</div>
+        <button class="rg-desc-toggle" type="button">${expandedIds.has(e.id) ? 'Show less' : 'Show more'}</button>` : ''}
+        ${safePoc ? `<div class="rg-card-poc"><span class="rg-card-poc-label">Point of Contact</span> ${safePoc}</div>` : ''}
+        ${safeLink ? `<div class="rg-card-link-row"><a href="${safeLink}" target="_blank" rel="noopener noreferrer">Access ↗</a></div>` : ''}
+        <div class="rg-card-bottom">
+          <span class="rg-stamp">${stampLabel}</span>
+          <div class="rg-actions">${actions}</div>
+        </div>
+      </div>`;
+  }
+
+  // ---------- Tabs ----------
+  document.getElementById('rg-tab-active').addEventListener('click', () => switchTab('active'));
+  document.getElementById('rg-tab-removed').addEventListener('click', () => switchTab('removed'));
+  function switchTab(tab){
+    if(READONLY_MODE && tab === 'removed') return;
+    currentTab = tab;
+    selectedIds.clear();
+    resetPage();
+    document.getElementById('rg-tab-active').classList.toggle('active', tab === 'active');
+    document.getElementById('rg-tab-removed').classList.toggle('active', tab === 'removed');
+    render();
+  }
+
+  // ---------- Combo field (select existing value, or add a new one) ----------
+  function buildComboFieldHtml(fieldId, labelText, options, currentValue){
+    const hasCurrentInOptions = currentValue && options.some(o => o.toLowerCase() === currentValue.toLowerCase());
+    const showNewInput = !!currentValue && !hasCurrentInOptions;
+    const optionsHtml = options.map(o => `<option value="${escapeHtml(o)}" ${o === currentValue ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('');
+    return `
+      <div class="rg-field">
+        <label for="${fieldId}-select">${labelText}</label>
+        <select id="${fieldId}-select" class="rg-combo-select" data-field="${fieldId}" style="${showNewInput ? 'display:none' : ''}">
+          <option value="">— None —</option>
+          ${optionsHtml}
+          <option value="__new__">+ Add new…</option>
+        </select>
+        <div class="rg-combo-new" data-field="${fieldId}" style="${showNewInput ? '' : 'display:none'}">
+          <input type="text" id="${fieldId}-new" maxlength="80" placeholder="Type a new ${labelText.toLowerCase()}" value="${showNewInput ? escapeHtml(currentValue) : ''}">
+          <button type="button" class="rg-combo-back" data-target="${fieldId}">Choose existing</button>
+        </div>
+      </div>`;
+  }
+
+  function setupComboField(fieldId){
+    const select = document.getElementById(fieldId + '-select');
+    const newWrap = document.querySelector(`.rg-combo-new[data-field="${fieldId}"]`);
+    select.addEventListener('change', () => {
+      if(select.value === '__new__'){
+        select.style.display = 'none';
+        newWrap.style.display = 'flex';
+        const input = document.getElementById(fieldId + '-new');
+        input.value = '';
+        input.focus();
+      }
+    });
+    newWrap.querySelector('.rg-combo-back').addEventListener('click', () => {
+      newWrap.style.display = 'none';
+      select.style.display = 'block';
+      select.value = '';
+    });
+  }
+
+  function getComboValue(fieldId){
+    const select = document.getElementById(fieldId + '-select');
+    if(select.style.display === 'none'){
+      return document.getElementById(fieldId + '-new').value.trim();
+    }
+    return select.value === '__new__' ? '' : select.value.trim();
+  }
+
+  // ---------- Rich text editor helpers for Description ----------
+  function setupRichTextEditor(editorEl, toolbarEl){
+    let savedRange = null;
+    function saveSelection(){
+      const sel = window.getSelection();
+      if(sel.rangeCount > 0 && editorEl.contains(sel.anchorNode)){
+        savedRange = sel.getRangeAt(0);
+      }
+    }
+    editorEl.addEventListener('mouseup', saveSelection);
+    editorEl.addEventListener('keyup', saveSelection);
+
+    toolbarEl.querySelectorAll('.rg-rte-btn').forEach(btn => {
+      btn.addEventListener('mousedown', (ev) => ev.preventDefault());
+      btn.addEventListener('click', () => {
+        editorEl.focus();
+        document.execCommand(btn.dataset.cmd, false, null);
+        saveSelection();
+      });
+    });
+  }
+
+  // ---------- Modal: add/edit ----------
+  document.getElementById('rg-new-entry-btn').addEventListener('click', () => openModal(null));
+
+  function openModal(id){
+    editingId = id;
+    modalOpen = true;
+    const entry = id ? entries.find(e => e.id === id) : null;
+
+    const deptOptions = distinctFieldValues('department');
+    const aiModelOptions = distinctFieldValues('aiModel');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'rg-modal-overlay';
+    overlay.id = 'rg-modal-overlay';
+    overlay.innerHTML = `
+      <div class="rg-modal" role="dialog" aria-modal="true">
+        <div class="rg-modal-header">
+          <h2>${entry ? 'Edit entry' : 'New entry'}</h2>
+          <button type="button" class="rg-modal-close" id="rg-modal-close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="rg-field">
+          <label for="rg-input-title">Title</label>
+          <input id="rg-input-title" type="text" maxlength="120" value="${entry ? escapeHtml(entry.title) : ''}" placeholder="Give it a clear name" />
+          <div class="rg-field-error" id="rg-title-error"></div>
+        </div>
+        ${buildComboFieldHtml('rg-dept-field', 'Department', deptOptions, entry ? (entry.department || '') : '')}
+        ${buildComboFieldHtml('rg-aimodel-field', 'AI Model', aiModelOptions, entry ? (entry.aiModel || '') : '')}
+        <div class="rg-field">
+          <label for="rg-input-brand">Brand <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
+          <input id="rg-input-brand" type="text" maxlength="80" value="${entry ? escapeHtml(entry.brand || '') : ''}" placeholder="Include if brand-specific" />
+        </div>
+        <div class="rg-field">
+          <label for="rg-input-desc">Description</label>
+          <div class="rg-rte-toolbar" id="rg-rte-toolbar">
+            <button type="button" class="rg-rte-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+            <button type="button" class="rg-rte-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+            <button type="button" class="rg-rte-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+            <button type="button" class="rg-rte-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+            <button type="button" class="rg-rte-btn" data-cmd="insertUnorderedList" title="Bullet list">&#8226; List</button>
+            <button type="button" class="rg-rte-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+          </div>
+          <div id="rg-input-desc" class="rg-rte-editor" contenteditable="true" data-placeholder="What is this?">${entry ? sanitizeRichHtml(entry.description || '') : ''}</div>
+        </div>
+        <div class="rg-field">
+          <label for="rg-input-link">Link</label>
+          <input id="rg-input-link" type="text" maxlength="500" value="${entry ? escapeHtml(entry.link || '') : ''}" placeholder="https://…" />
+        </div>
+        <div class="rg-field">
+          <label for="rg-input-poc">Point of Contact <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
+          <input id="rg-input-poc" type="text" maxlength="120" value="${entry ? escapeHtml(entry.pointOfContact || '') : ''}" placeholder="Name or email" />
+        </div>
+        <div class="rg-modal-actions">
+          <button class="rg-btn secondary" id="rg-modal-cancel">Cancel</button>
+          <button class="rg-btn primary" id="rg-modal-save">${entry ? 'Save changes' : 'Add entry'}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    setupComboField('rg-dept-field');
+    setupComboField('rg-aimodel-field');
+
+    const editorEl = document.getElementById('rg-input-desc');
+    const toolbarEl = document.getElementById('rg-rte-toolbar');
+    setupRichTextEditor(editorEl, toolbarEl);
+
+    document.getElementById('rg-modal-cancel').addEventListener('click', closeModal);
+    document.getElementById('rg-modal-close').addEventListener('click', closeModal);
+    document.getElementById('rg-modal-save').addEventListener('click', saveModal);
+    document.getElementById('rg-input-title').focus();
+  }
+
+  function closeModal(){
+    const overlay = document.getElementById('rg-modal-overlay');
+    if(overlay) overlay.remove();
+    editingId = null;
+    modalOpen = false;
+  }
+
+  async function saveModal(){
+    const title = document.getElementById('rg-input-title').value.trim();
+    const department = getComboValue('rg-dept-field');
+    const brand = document.getElementById('rg-input-brand').value.trim();
+    const rawDescHtml = document.getElementById('rg-input-desc').innerHTML;
+    const description = htmlIsBlank(rawDescHtml) ? '' : sanitizeRichHtml(rawDescHtml);
+    const link = document.getElementById('rg-input-link').value.trim();
+    const aiModel = getComboValue('rg-aimodel-field');
+    const pointOfContact = document.getElementById('rg-input-poc').value.trim();
+    const errorEl = document.getElementById('rg-title-error');
+
+    if(!title){
+      errorEl.textContent = 'A title is required.';
+      return;
+    }
+    errorEl.textContent = '';
+
+    const now = Date.now();
+    if(editingId){
+      const entry = entries.find(e => e.id === editingId);
+      if(entry){
+        entry.title = title;
+        entry.department = department;
+        entry.brand = brand;
+        entry.description = description;
+        entry.link = link;
+        entry.aiModel = aiModel;
+        entry.pointOfContact = pointOfContact;
+        entry.updatedAt = now;
+      }
+      toast('Entry updated');
+    } else {
+      entries.push({
+        id: 'e_' + now + '_' + Math.random().toString(36).slice(2,8),
+        title, department, brand, description, link, aiModel, pointOfContact,
+        status: 'active',
+        createdAt: now,
+        updatedAt: now
+      });
+      toast('Entry added');
+    }
+    closeModal();
+    render();
+    await saveEntries();
+  }
+
+  // ---------- Remove / restore / delete ----------
+  async function removeEntry(id){
+    const entry = entries.find(e => e.id === id);
+    if(!entry) return;
+    entry.status = 'removed';
+    entry.removedAt = Date.now();
+    render();
+    toast('Moved to Archive');
+    await saveEntries();
+  }
+
+  async function restoreEntry(id){
+    const entry = entries.find(e => e.id === id);
+    if(!entry) return;
+    entry.status = 'active';
+    delete entry.removedAt;
+    render();
+    toast('Entry restored');
+    await saveEntries();
+  }
+
+  async function bulkArchive(){
+    const ids = Array.from(selectedIds);
+    if(ids.length === 0) return;
+    entries.forEach(e => {
+      if(ids.includes(e.id) && e.status !== 'removed'){
+        e.status = 'removed';
+        e.removedAt = Date.now();
+      }
+    });
+    selectedIds.clear();
+    render();
+    toast(`${ids.length} ${ids.length === 1 ? 'entry' : 'entries'} moved to Archive`);
+    await saveEntries();
+  }
+
+  async function bulkRestore(){
+    const ids = Array.from(selectedIds);
+    if(ids.length === 0) return;
+    entries.forEach(e => {
+      if(ids.includes(e.id) && e.status === 'removed'){
+        e.status = 'active';
+        delete e.removedAt;
+      }
+    });
+    selectedIds.clear();
+    render();
+    toast(`${ids.length} ${ids.length === 1 ? 'entry' : 'entries'} restored`);
+    await saveEntries();
+  }
+
+  function confirmDeleteIds(ids){
+    if(ids.length === 0) return;
+    pendingDeleteIds = ids;
+    const overlay = document.createElement('div');
+    overlay.className = 'rg-modal-overlay';
+    overlay.id = 'rg-confirm-overlay';
+    const plural = ids.length === 1 ? 'entry' : 'entries';
+    overlay.innerHTML = `
+      <div class="rg-modal" role="dialog" aria-modal="true">
+        <h2>Delete permanently?</h2>
+        <p style="font-size:14px; color: var(--gray-500); margin: 0 0 4px;">This can't be undone. ${ids.length} ${plural} will be gone for good.</p>
+        <div class="rg-modal-actions">
+          <button class="rg-btn secondary" id="rg-confirm-cancel">Cancel</button>
+          <button class="rg-btn danger" id="rg-confirm-delete">Delete forever</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    document.getElementById('rg-confirm-cancel').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (ev) => { if(ev.target === overlay) overlay.remove(); });
+    document.getElementById('rg-confirm-delete').addEventListener('click', async () => {
+      entries = entries.filter(e => !pendingDeleteIds.includes(e.id));
+      selectedIds.forEach(id => { if(pendingDeleteIds.includes(id)) selectedIds.delete(id); });
+      overlay.remove();
+      render();
+      toast(`${pendingDeleteIds.length} ${pendingDeleteIds.length === 1 ? 'entry' : 'entries'} deleted`);
+      await saveEntries();
+    });
+  }
+
+  // ---------- Export a standalone copy with current entries baked in ----------
+  function buildExportedHtml(){
+    const seedJson = JSON.stringify(entries).replace(/<\//g, '<\\/');
+    let scriptSrc = SELF_SCRIPT_TAG ? SELF_SCRIPT_TAG.textContent : '';
+    scriptSrc = scriptSrc.replace(
+      /const SEED_ENTRIES = \[\s*\];/,
+      `const SEED_ENTRIES = ${seedJson};`
+    );
+    scriptSrc = scriptSrc.replace(
+      /const READONLY_MODE = false;/,
+      'const READONLY_MODE = true;'
+    );
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLTFRM Digital - Advertising | AI Directory</title>
+</head>
+<body>
+${PRISTINE_STYLE_HTML}
+${PRISTINE_ROOT_HTML}
+${PRISTINE_TOAST_HTML}
+<script>
+${scriptSrc}
+</scr` + `ipt>
+</body>
+</html>`;
+  }
+
+  function exportDashboard(){
+    if(READONLY_MODE) return;
+    try{
+      const html = buildExportedHtml();
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('Downloaded — upload this file to GitHub to update the live version');
+    } catch(e){
+      console.error('Export failed:', e);
+      toast('Export failed — see console for details');
+    }
+  }
+
+  document.getElementById('rg-export-btn').addEventListener('click', exportDashboard);
+
+  // ---------- Live polling so other users' changes appear ----------
+  function startPolling(){
+    pollTimer = setInterval(async () => {
+      if(modalOpen || isSaving) return;
+      try{
+        const res = await window.storage.get(STORAGE_KEY, true);
+        const fresh = res && res.value ? JSON.parse(res.value) : [];
+        if(JSON.stringify(fresh) !== JSON.stringify(entries)){
+          entries = fresh;
+          render();
+        }
+      } catch(e){ /* ignore transient errors */ }
+    }, 5000);
+  }
+
+  if(READONLY_MODE){
+    const newBtn = document.getElementById('rg-new-entry-btn');
+    if(newBtn) newBtn.style.display = 'none';
+    const archiveTabBtn = document.getElementById('rg-tab-removed');
+    if(archiveTabBtn) archiveTabBtn.style.display = 'none';
+    const bulkBar = document.querySelector('.rg-bulk-bar');
+    if(bulkBar) bulkBar.style.display = 'none';
+    const exportBtn = document.getElementById('rg-export-btn');
+    if(exportBtn) exportBtn.style.display = 'none';
+  }
+
+  if(hasClaudeStorage){
+    loadEntries().then(startPolling);
+  } else {
+    document.querySelector('.rg-eyebrow').textContent = READONLY_MODE
+      ? 'A directory of shared AI tools'
+      : 'Saved in this browser — use Export to update the shared file';
+    // Standalone / GitHub Pages mode: entries persist in this browser via
+    // localStorage. Keep other open tabs on the same device in sync too.
+    loadEntries();
+    window.addEventListener('storage', (ev) => {
+      if(ev.key === STORAGE_KEY && !modalOpen){
+        loadEntries();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
