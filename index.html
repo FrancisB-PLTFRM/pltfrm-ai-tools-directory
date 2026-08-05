@@ -71,6 +71,7 @@
   }
 
   #registry-inner{ width: 100%; max-width: 780px; position: relative; z-index: 1; }
+  #registry-inner.category-mode{ max-width: 1040px; }
 
   /* ---------- Header ---------- */
   .rg-header{
@@ -84,6 +85,7 @@
     flex-wrap: wrap;
   }
   .rg-header-text{ flex: 1 1 320px; min-width: 0; }
+  .rg-header-actions{ display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
   .rg-export-btn{
     flex-shrink: 0;
     font-family: 'Inter', sans-serif;
@@ -131,35 +133,38 @@
   /* ---------- Toolbar ---------- */
   .rg-toolbar{
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: 12px;
-    margin: 0 0 16px;
+    gap: 16px;
+    margin: 0 0 20px;
+    padding-bottom: 0;
+    border-bottom: 1px solid var(--line);
     flex-wrap: wrap;
   }
-  .rg-tabs{ display: flex; gap: 8px; }
+  .rg-tabs{ display: flex; gap: 32px; align-self: stretch; }
   .rg-tab-btn{
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 0.06em;
+    font-size: 14px;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    background: var(--surface);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--line);
-    color: var(--black);
-    padding: 9px 15px;
-    border-radius: var(--radius);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--gray-500);
+    padding: 8px 2px 15px;
+    margin-bottom: -1px;
     cursor: pointer;
-    transition: all .15s ease;
+    transition: color .15s ease, border-color .15s ease;
   }
-  .rg-tab-btn:hover{ background: var(--surface-hover); }
+  .rg-tab-btn:hover{ color: var(--gray-700); }
   .rg-tab-btn.active{
-    background: var(--black);
-    border-color: var(--black);
-    color: var(--white);
+    background: none;
+    color: var(--black);
+    border-bottom-color: var(--black);
   }
+
+  .rg-toolbar-actions{ display: flex; gap: 8px; flex-wrap: wrap; }
 
   .rg-new-btn{
     font-family: 'Inter', sans-serif;
@@ -305,6 +310,105 @@
   }
   @media (max-width: 480px){
     .rg-list.grid-view{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Category view: sidebar TOC + department tabs ---------- */
+  .rg-dept-tabs{
+    display: none;
+    gap: 26px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .rg-dept-tabs.visible{ display: flex; }
+  .rg-dept-tab{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    padding: 6px 2px 13px;
+    margin-bottom: -1px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .rg-dept-tab:hover{ color: var(--gray-700); }
+  .rg-dept-tab.active{ background: none; color: var(--black); border-bottom-color: var(--black); }
+
+  .rg-category-layout{ display: flex; gap: 28px; align-items: flex-start; }
+  .rg-category-sidebar{ display: none; }
+  .rg-list-area{ flex: 1; min-width: 0; }
+
+  #registry-inner.category-mode .rg-category-sidebar{
+    display: block;
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+
+  .rg-toc-dept{ margin-bottom: 4px; }
+  .rg-toc-dept-header{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--gray-700);
+    letter-spacing: -0.01em;
+  }
+  .rg-toc-dept-header:hover{ background: rgba(255,255,255,0.06); }
+  .rg-toc-dept-header.active{ color: var(--black); }
+  .rg-toc-dept-header.active .rg-toc-dept-name{ border-bottom: 2px solid var(--black); }
+  .rg-toc-chevron{
+    flex-shrink: 0;
+    width: 14px; height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    transition: transform .15s ease;
+  }
+  .rg-toc-chevron.collapsed{ transform: rotate(-90deg); }
+  .rg-toc-dept-name{ flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rg-toc-dept-count{ font-size: 11px; font-weight: 500; color: var(--gray-500); }
+  .rg-toc-entries{ list-style: none; margin: 0; padding: 0 0 6px 20px; }
+  .rg-toc-entries.collapsed{ display: none; }
+  .rg-toc-entry{
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 5px 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rg-toc-entry:hover{ color: var(--black); background: rgba(255,255,255,0.06); }
+
+  .rg-card.rg-card-flash{ border-color: var(--black); box-shadow: 0 0 0 2px var(--black); }
+
+  @media (max-width: 860px){
+    #registry-inner.category-mode{ max-width: 780px; }
+    .rg-category-sidebar{ display: none !important; }
+    .rg-category-layout{ display: block; }
   }
 
   .rg-card{
@@ -699,10 +803,17 @@
         <h1 class="rg-title">PLTFRM  Digital -  Advertising | AI Directory</h1>
         <p class="rg-sub">Directory of PLTFRM Digital's Advertising AI Tools</p>
       </div>
-      <button type="button" class="rg-export-btn" id="rg-export-btn" title="Download an updated copy of this dashboard, with your current entries baked in, ready to upload to GitHub">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Export
-      </button>
+      <div class="rg-header-actions">
+        <button type="button" class="rg-export-btn" id="rg-upload-submission-btn" title="Read a CSV file generated by Submit New Tool and add it as a new entry">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Upload Submission
+        </button>
+        <input type="file" id="rg-upload-input" accept=".csv,text/csv" style="display:none">
+        <button type="button" class="rg-export-btn" id="rg-export-btn" title="Download an updated copy of this dashboard, with your current entries baked in, ready to upload to GitHub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export
+        </button>
+      </div>
     </div>
 
     <div class="rg-toolbar">
@@ -710,10 +821,16 @@
         <button class="rg-tab-btn active" id="rg-tab-active" data-tab="active">ENTRIES (<span id="rg-count-active">0</span>)</button>
         <button class="rg-tab-btn" id="rg-tab-removed" data-tab="removed">ARCHIVE (<span id="rg-count-removed">0</span>)</button>
       </div>
-      <button class="rg-new-btn" id="rg-new-entry-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-        New entry
-      </button>
+      <div class="rg-toolbar-actions">
+        <button class="rg-new-btn" id="rg-new-entry-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New entry
+        </button>
+        <button class="rg-new-btn" id="rg-submit-tool-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          Submit New Tool
+        </button>
+      </div>
     </div>
 
     <div class="rg-controls">
@@ -745,7 +862,10 @@
       <div class="rg-control-group rg-view-toggle-group">
         <label>View</label>
         <div class="rg-view-toggle">
-          <button type="button" class="rg-view-btn active" id="rg-view-list" aria-label="List view" title="List view">
+          <button type="button" class="rg-view-btn active" id="rg-view-category" aria-label="Category view" title="Category view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="6" y1="12" x2="21" y2="12"></line><line x1="6" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <button type="button" class="rg-view-btn" id="rg-view-list" aria-label="List view" title="List view">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
           </button>
           <button type="button" class="rg-view-btn" id="rg-view-grid" aria-label="Grid view" title="Grid view">
@@ -755,6 +875,8 @@
       </div>
     </div>
 
+    <div class="rg-dept-tabs" id="rg-dept-tabs"></div>
+
     <div class="rg-bulk-bar">
       <label class="rg-select-all">
         <input type="checkbox" id="rg-select-all-checkbox">
@@ -763,13 +885,18 @@
       <div class="rg-bulk-actions" id="rg-bulk-actions"></div>
     </div>
 
-    <div class="rg-list" id="rg-list"></div>
-    <div class="rg-list-footer" id="rg-list-footer">
-      <div class="rg-control-group" id="rg-pagesize-group">
-        <label for="rg-pagesize-input">Show</label>
-        <input type="number" id="rg-pagesize-input" min="1" max="500" value="5">
+    <div class="rg-category-layout" id="rg-category-layout">
+      <div class="rg-category-sidebar" id="rg-category-sidebar"></div>
+      <div class="rg-list-area">
+        <div class="rg-list" id="rg-list"></div>
+        <div class="rg-list-footer" id="rg-list-footer">
+          <div class="rg-control-group" id="rg-pagesize-group">
+            <label for="rg-pagesize-input">Show</label>
+            <input type="number" id="rg-pagesize-input" min="1" max="500" value="5">
+          </div>
+          <div class="rg-pagination" id="rg-pagination"></div>
+        </div>
       </div>
-      <div class="rg-pagination" id="rg-pagination"></div>
     </div>
   </div>
 </div>
@@ -807,13 +934,15 @@
   const selectedIds = new Set();
   let pendingDeleteIds = [];
   let isSaving = false;
-  let viewMode = 'list';
+  let viewMode = 'category';
   let listPageSize = 5;
   let currentPage = 1;
   let lastPagedIds = [];
   const GRID_PAGE_SIZE = 12;
   let searchQuery = '';
   let searchField = 'title';
+  let categoryDept = null;
+  const collapsedDepts = new Set();
 
   const listEl = document.getElementById('rg-list');
   const countActiveEl = document.getElementById('rg-count-active');
@@ -822,17 +951,21 @@
   const sortSelectEl = document.getElementById('rg-sort-select');
   const deptSelectEl = document.getElementById('rg-dept-select');
   const pageSizeInputEl = document.getElementById('rg-pagesize-input');
+  const pageSizeGroupEl = document.getElementById('rg-pagesize-group');
   const paginationEl = document.getElementById('rg-pagination');
   const searchInputEl = document.getElementById('rg-search-input');
   const searchFieldEl = document.getElementById('rg-search-field');
+  const registryInnerEl = document.getElementById('registry-inner');
+  const categorySidebarEl = document.getElementById('rg-category-sidebar');
+  const deptTabsEl = document.getElementById('rg-dept-tabs');
 
   function resetPage(){ currentPage = 1; }
 
-  function toast(msg){
+  function toast(msg, duration){
     toastEl.textContent = msg;
     toastEl.classList.add('show');
     clearTimeout(toastEl._t);
-    toastEl._t = setTimeout(()=> toastEl.classList.remove('show'), 2200);
+    toastEl._t = setTimeout(()=> toastEl.classList.remove('show'), duration || 2200);
   }
 
   function escapeHtml(str){
@@ -981,47 +1114,88 @@
     const baseList = currentTab === 'active' ? active : removed;
     populateDeptFilter(baseList);
 
-    let list = deptFilter === 'all'
-      ? baseList
-      : baseList.filter(e => (e.department||'').trim() === deptFilter);
+    const isCategory = viewMode === 'category';
+    registryInnerEl.classList.toggle('category-mode', isCategory);
+    const deptFilterGroup = deptSelectEl.closest('.rg-control-group');
+    if(deptFilterGroup) deptFilterGroup.style.display = isCategory ? 'none' : 'flex';
+    pageSizeGroupEl.style.display = (isCategory || viewMode === 'grid') ? 'none' : 'flex';
 
-    const query = searchQuery.trim().toLowerCase();
-    if(query){
-      list = list.filter(e => {
-        if(searchField === 'title') return (e.title||'').toLowerCase().includes(query);
-        if(searchField === 'department') return (e.department||'').toLowerCase().includes(query);
-        if(searchField === 'description') return plainText(e.description||'').toLowerCase().includes(query);
-        return true;
-      });
+    const deptSearchOptionEl = searchFieldEl.querySelector('option[value="department"]');
+    if(deptSearchOptionEl){
+      deptSearchOptionEl.hidden = isCategory;
+      deptSearchOptionEl.disabled = isCategory;
+    }
+    if(isCategory && searchField === 'department'){
+      searchField = 'title';
+      searchFieldEl.value = 'title';
     }
 
-    list = sortList(list);
+    const query = searchQuery.trim().toLowerCase();
+    function matchesSearch(e){
+      if(!query) return true;
+      if(searchField === 'title') return (e.title||'').toLowerCase().includes(query);
+      if(searchField === 'department') return (e.department||'').toLowerCase().includes(query);
+      if(searchField === 'description') return plainText(e.description||'').toLowerCase().includes(query);
+      return true;
+    }
 
-    listEl.className = 'rg-list' + (viewMode === 'grid' ? ' grid-view' : ' list-view');
+    let list;
 
-    const pageSize = viewMode === 'grid' ? GRID_PAGE_SIZE : Math.max(1, listPageSize);
+    if(isCategory){
+      const groups = {};
+      baseList.forEach(e => {
+        const dept = (e.department||'').trim() || 'Uncategorized';
+        (groups[dept] = groups[dept] || []).push(e);
+      });
+      const deptKeys = Object.keys(groups).sort((a,b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+      if(deptKeys.length === 0){
+        categoryDept = null;
+      } else if(!categoryDept || !groups[categoryDept]){
+        categoryDept = deptKeys[0];
+      }
+
+      renderDeptTabs(deptKeys);
+      renderCategorySidebar(groups, deptKeys);
+
+      list = categoryDept ? groups[categoryDept].filter(matchesSearch) : [];
+      list = sortList(list);
+    } else {
+      deptTabsEl.classList.remove('visible');
+      deptTabsEl.innerHTML = '';
+
+      list = deptFilter === 'all' ? baseList : baseList.filter(e => (e.department||'').trim() === deptFilter);
+      list = list.filter(matchesSearch);
+      list = sortList(list);
+    }
+
+    listEl.className = 'rg-list' + (viewMode === 'grid' ? ' grid-view' : (isCategory ? ' category-view' : ' list-view'));
+
+    const pageSize = isCategory ? Math.max(1, list.length) : (viewMode === 'grid' ? GRID_PAGE_SIZE : Math.max(1, listPageSize));
     const totalItems = list.length;
-    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const totalPages = isCategory ? 1 : Math.max(1, Math.ceil(totalItems / pageSize));
     if(currentPage > totalPages) currentPage = totalPages;
     if(currentPage < 1) currentPage = 1;
 
     if(totalItems === 0){
-      const deptFiltered = deptFilter !== 'all';
+      const deptFiltered = !isCategory && deptFilter !== 'all';
       listEl.innerHTML = query
-        ? `<div class="rg-empty"><p class="rg-empty-title">No matches</p><p>Nothing matches "${escapeHtml(searchQuery.trim())}" in ${searchField}. Try a different term or field.</p></div>`
+        ? `<div class="rg-empty"><p class="rg-empty-title">No matches</p><p>Nothing matches "${escapeHtml(searchQuery.trim())}" in ${searchField}${isCategory && categoryDept ? ` within ${escapeHtml(categoryDept)}` : ''}. Try a different term or field.</p></div>`
         : (deptFiltered
           ? `<div class="rg-empty"><p class="rg-empty-title">No entries in this department</p><p>Try a different department or switch back to "All departments".</p></div>`
-          : (currentTab === 'active'
-            ? `<div class="rg-empty"><p class="rg-empty-title">Nothing logged yet</p><p>Add the first entry to start the shared list.</p></div>`
-            : `<div class="rg-empty"><p class="rg-empty-title">The archive is empty</p><p>Removed entries will land here until they're restored or cleared for good.</p></div>`));
+          : (isCategory
+            ? `<div class="rg-empty"><p class="rg-empty-title">Nothing here yet</p><p>${categoryDept ? `No entries under ${escapeHtml(categoryDept)}.` : 'Add an entry with a department to populate this view.'}</p></div>`
+            : (currentTab === 'active'
+              ? `<div class="rg-empty"><p class="rg-empty-title">Nothing logged yet</p><p>Add the first entry to start the shared list.</p></div>`
+              : `<div class="rg-empty"><p class="rg-empty-title">The archive is empty</p><p>Removed entries will land here until they're restored or cleared for good.</p></div>`)));
       lastPagedIds = [];
       updateBulkBar([]);
       renderPagination(0, 1);
       return;
     }
 
-    const startIdx = (currentPage - 1) * pageSize;
-    const pagedList = list.slice(startIdx, startIdx + pageSize);
+    const startIdx = isCategory ? 0 : (currentPage - 1) * pageSize;
+    const pagedList = isCategory ? list : list.slice(startIdx, startIdx + pageSize);
     lastPagedIds = pagedList.map(e => e.id);
 
     listEl.innerHTML = pagedList.map(e => renderCard(e)).join('');
@@ -1066,7 +1240,80 @@
     });
 
     updateBulkBar(pagedList);
-    renderPagination(totalItems, totalPages);
+    if(isCategory){ paginationEl.innerHTML = ''; } else { renderPagination(totalItems, totalPages); }
+  }
+
+  function renderDeptTabs(deptKeys){
+    deptTabsEl.classList.toggle('visible', deptKeys.length > 0);
+    deptTabsEl.innerHTML = deptKeys.map(dept =>
+      `<button type="button" class="rg-dept-tab${dept === categoryDept ? ' active' : ''}" data-dept="${escapeHtml(dept)}">${escapeHtml(dept)}</button>`
+    ).join('');
+    deptTabsEl.querySelectorAll('.rg-dept-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryDept = btn.getAttribute('data-dept');
+        collapsedDepts.delete(categoryDept);
+        resetPage();
+        render();
+      });
+    });
+  }
+
+  function renderCategorySidebar(groups, deptKeys){
+    categorySidebarEl.innerHTML = deptKeys.map(dept => {
+      const items = sortList(groups[dept]);
+      const isActive = dept === categoryDept;
+      const isCollapsed = collapsedDepts.has(dept);
+      const entryItems = items.map(e =>
+        `<button type="button" class="rg-toc-entry" data-id="${e.id}" data-dept="${escapeHtml(dept)}">${escapeHtml(e.title)}</button>`
+      ).join('');
+      return `
+        <div class="rg-toc-dept">
+          <div class="rg-toc-dept-header${isActive ? ' active' : ''}" data-dept="${escapeHtml(dept)}">
+            <span class="rg-toc-chevron${isCollapsed ? ' collapsed' : ''}" data-toggle-dept="${escapeHtml(dept)}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+            <span class="rg-toc-dept-name">${escapeHtml(dept)}</span>
+            <span class="rg-toc-dept-count">${items.length}</span>
+          </div>
+          <ul class="rg-toc-entries${isCollapsed ? ' collapsed' : ''}">${entryItems}</ul>
+        </div>`;
+    }).join('');
+
+    categorySidebarEl.querySelectorAll('.rg-toc-chevron').forEach(el => {
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const dept = el.getAttribute('data-toggle-dept');
+        if(collapsedDepts.has(dept)){ collapsedDepts.delete(dept); } else { collapsedDepts.add(dept); }
+        render();
+      });
+    });
+    categorySidebarEl.querySelectorAll('.rg-toc-dept-header').forEach(el => {
+      el.addEventListener('click', () => {
+        const dept = el.getAttribute('data-dept');
+        categoryDept = dept;
+        collapsedDepts.delete(dept);
+        resetPage();
+        render();
+      });
+    });
+    categorySidebarEl.querySelectorAll('.rg-toc-entry').forEach(el => {
+      el.addEventListener('click', () => {
+        const dept = el.getAttribute('data-dept');
+        const id = el.getAttribute('data-id');
+        categoryDept = dept;
+        collapsedDepts.delete(dept);
+        resetPage();
+        render();
+        requestAnimationFrame(() => {
+          const card = document.getElementById('card-' + id);
+          if(card){
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('rg-card-flash');
+            setTimeout(() => card.classList.remove('rg-card-flash'), 1500);
+          }
+        });
+      });
+    });
   }
 
   function renderPagination(totalItems, totalPages){
@@ -1144,6 +1391,7 @@
     render();
   });
 
+  document.getElementById('rg-view-category').addEventListener('click', () => setViewMode('category'));
   document.getElementById('rg-view-list').addEventListener('click', () => setViewMode('list'));
   document.getElementById('rg-view-grid').addEventListener('click', () => setViewMode('grid'));
 
@@ -1151,9 +1399,9 @@
     if(viewMode === mode) return;
     viewMode = mode;
     resetPage();
+    document.getElementById('rg-view-category').classList.toggle('active', mode === 'category');
     document.getElementById('rg-view-list').classList.toggle('active', mode === 'list');
     document.getElementById('rg-view-grid').classList.toggle('active', mode === 'grid');
-    document.getElementById('rg-pagesize-group').style.display = mode === 'list' ? 'flex' : 'none';
     render();
   }
 
@@ -1290,6 +1538,7 @@
 
   // ---------- Modal: add/edit ----------
   document.getElementById('rg-new-entry-btn').addEventListener('click', () => openModal(null));
+  document.getElementById('rg-submit-tool-btn').addEventListener('click', () => openSubmitModal());
 
   function openModal(id){
     editingId = id;
@@ -1411,6 +1660,237 @@
     }
     closeModal();
     render();
+    await saveEntries();
+  }
+
+  // ---------- Submit New Tool: exports a submission as a templated CSV ----------
+  // Column order is fixed and must match what Upload Submission expects.
+  const SUBMISSION_CSV_HEADERS = ['Title', 'Department', 'Brand', 'AI Model', 'Point of Contact', 'Link', 'Description', 'Submitted At'];
+
+  function csvEscape(value){
+    const str = String(value == null ? '' : value);
+    if(/[",\n\r]/.test(str)){
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
+
+  function buildSubmissionCsv(sub){
+    const row = [
+      sub.title, sub.department, sub.brand, sub.aiModel,
+      sub.pointOfContact, sub.link, sub.description,
+      new Date(sub.submittedAt).toLocaleString()
+    ];
+    return SUBMISSION_CSV_HEADERS.map(csvEscape).join(',') + '\r\n' + row.map(csvEscape).join(',') + '\r\n';
+  }
+
+  // Minimal RFC4180-style CSV parser: handles quoted fields, embedded commas,
+  // embedded quotes ("") and embedded newlines within quoted fields.
+  function parseCsv(text){
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+    for(let i = 0; i < text.length; i++){
+      const char = text[i];
+      if(inQuotes){
+        if(char === '"'){
+          if(text[i + 1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += char;
+        }
+      } else if(char === '"'){
+        inQuotes = true;
+      } else if(char === ','){
+        row.push(field); field = '';
+      } else if(char === '\r'){
+        // skip; \n (below) closes the row
+      } else if(char === '\n'){
+        row.push(field); field = '';
+        rows.push(row); row = [];
+      } else {
+        field += char;
+      }
+    }
+    if(field.length > 0 || row.length > 0){ row.push(field); rows.push(row); }
+    return rows.filter(r => !(r.length === 1 && r[0].trim() === ''));
+  }
+
+  function openSubmitModal(){
+    modalOpen = true;
+    const deptOptions = distinctFieldValues('department');
+    const aiModelOptions = distinctFieldValues('aiModel');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'rg-modal-overlay';
+    overlay.id = 'rg-modal-overlay';
+    overlay.innerHTML = `
+      <div class="rg-modal" role="dialog" aria-modal="true">
+        <div class="rg-modal-header">
+          <h2>Submit a new tool</h2>
+          <button type="button" class="rg-modal-close" id="rg-modal-close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <p style="font-size:13px; color: var(--gray-500); margin: 0 0 14px;">This downloads a file for the Directory Operator to review — it won't appear in the list until they add it.</p>
+        <div class="rg-field">
+          <label for="rg-submit-input-title">Title</label>
+          <input id="rg-submit-input-title" type="text" maxlength="120" placeholder="Give it a clear name" />
+          <div class="rg-field-error" id="rg-submit-title-error"></div>
+        </div>
+        ${buildComboFieldHtml('rg-submit-dept-field', 'Department', deptOptions, '')}
+        ${buildComboFieldHtml('rg-submit-aimodel-field', 'AI Model', aiModelOptions, '')}
+        <div class="rg-field">
+          <label for="rg-submit-input-brand">Brand <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
+          <input id="rg-submit-input-brand" type="text" maxlength="80" placeholder="Include if brand-specific" />
+        </div>
+        <div class="rg-field">
+          <label for="rg-submit-input-desc">Description</label>
+          <div class="rg-rte-toolbar" id="rg-submit-rte-toolbar">
+            <button type="button" class="rg-rte-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+            <button type="button" class="rg-rte-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+            <button type="button" class="rg-rte-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+            <button type="button" class="rg-rte-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+            <button type="button" class="rg-rte-btn" data-cmd="insertUnorderedList" title="Bullet list">&#8226; List</button>
+            <button type="button" class="rg-rte-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+          </div>
+          <div id="rg-submit-input-desc" class="rg-rte-editor" contenteditable="true" data-placeholder="What is this?"></div>
+        </div>
+        <div class="rg-field">
+          <label for="rg-submit-input-link">Link</label>
+          <input id="rg-submit-input-link" type="text" maxlength="500" placeholder="https://…" />
+        </div>
+        <div class="rg-field">
+          <label for="rg-submit-input-poc">Point of Contact <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
+          <input id="rg-submit-input-poc" type="text" maxlength="120" placeholder="Name or email" />
+        </div>
+        <div class="rg-modal-actions">
+          <button class="rg-btn secondary" id="rg-modal-cancel">Cancel</button>
+          <button class="rg-btn primary" id="rg-modal-save">Submit for review</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    setupComboField('rg-submit-dept-field');
+    setupComboField('rg-submit-aimodel-field');
+
+    const editorEl = document.getElementById('rg-submit-input-desc');
+    const toolbarEl = document.getElementById('rg-submit-rte-toolbar');
+    setupRichTextEditor(editorEl, toolbarEl);
+
+    document.getElementById('rg-modal-cancel').addEventListener('click', closeModal);
+    document.getElementById('rg-modal-close').addEventListener('click', closeModal);
+    document.getElementById('rg-modal-save').addEventListener('click', saveSubmitModal);
+    document.getElementById('rg-submit-input-title').focus();
+  }
+
+  function saveSubmitModal(){
+    const title = document.getElementById('rg-submit-input-title').value.trim();
+    const department = getComboValue('rg-submit-dept-field');
+    const brand = document.getElementById('rg-submit-input-brand').value.trim();
+    const rawDescHtml = document.getElementById('rg-submit-input-desc').innerHTML;
+    const description = htmlIsBlank(rawDescHtml) ? '' : sanitizeRichHtml(rawDescHtml);
+    const link = document.getElementById('rg-submit-input-link').value.trim();
+    const aiModel = getComboValue('rg-submit-aimodel-field');
+    const pointOfContact = document.getElementById('rg-submit-input-poc').value.trim();
+    const errorEl = document.getElementById('rg-submit-title-error');
+
+    if(!title){
+      errorEl.textContent = 'A title is required.';
+      return;
+    }
+    errorEl.textContent = '';
+
+    const submission = {
+      title, department, brand, description, link, aiModel, pointOfContact,
+      submittedAt: Date.now()
+    };
+
+    try{
+      const csv = buildSubmissionCsv(submission);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'submission';
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tool-submission-${safeName}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch(e){
+      console.error('Submission export failed:', e);
+    }
+
+    closeModal();
+    toast('Downloaded — send this file to the Directory Operator for review and entry into the directory.', 4200);
+  }
+
+  // ---------- Upload Submission: reads a Submit New Tool CSV and adds it as an entry ----------
+  function findSubmissionColumnIndex(header, name){
+    return header.findIndex(h => h.trim().toLowerCase() === name.toLowerCase());
+  }
+
+  async function handleUploadFile(file){
+    if(READONLY_MODE) return;
+    let text;
+    try{
+      text = await file.text();
+    } catch(e){
+      toast('Could not read that file');
+      return;
+    }
+
+    const rows = parseCsv(text);
+    if(rows.length < 2){
+      toast('No submission rows found in that file');
+      return;
+    }
+
+    const header = rows[0];
+    const idx = {
+      title: findSubmissionColumnIndex(header, 'Title'),
+      department: findSubmissionColumnIndex(header, 'Department'),
+      brand: findSubmissionColumnIndex(header, 'Brand'),
+      aiModel: findSubmissionColumnIndex(header, 'AI Model'),
+      pointOfContact: findSubmissionColumnIndex(header, 'Point of Contact'),
+      link: findSubmissionColumnIndex(header, 'Link'),
+      description: findSubmissionColumnIndex(header, 'Description')
+    };
+
+    if(idx.title === -1){
+      toast("That file doesn't match the expected submission format");
+      return;
+    }
+
+    let added = 0;
+    const now = Date.now();
+    rows.slice(1).forEach(r => {
+      const title = (r[idx.title] || '').trim();
+      if(!title) return;
+      entries.push({
+        id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '_' + added,
+        title,
+        department: idx.department > -1 ? (r[idx.department] || '').trim() : '',
+        brand: idx.brand > -1 ? (r[idx.brand] || '').trim() : '',
+        description: idx.description > -1 ? sanitizeRichHtml(r[idx.description] || '') : '',
+        link: idx.link > -1 ? (r[idx.link] || '').trim() : '',
+        aiModel: idx.aiModel > -1 ? (r[idx.aiModel] || '').trim() : '',
+        pointOfContact: idx.pointOfContact > -1 ? (r[idx.pointOfContact] || '').trim() : '',
+        status: 'active',
+        createdAt: now,
+        updatedAt: now
+      });
+      added++;
+    });
+
+    if(added === 0){
+      toast('No valid entries found in that file');
+      return;
+    }
+    render();
+    toast(`${added} ${added === 1 ? 'entry' : 'entries'} imported from submission`);
     await saveEntries();
   }
 
@@ -1546,6 +2026,16 @@ ${scriptSrc}
 
   document.getElementById('rg-export-btn').addEventListener('click', exportDashboard);
 
+  const uploadInputEl = document.getElementById('rg-upload-input');
+  document.getElementById('rg-upload-submission-btn').addEventListener('click', () => {
+    uploadInputEl.value = '';
+    uploadInputEl.click();
+  });
+  uploadInputEl.addEventListener('change', () => {
+    const file = uploadInputEl.files && uploadInputEl.files[0];
+    if(file) handleUploadFile(file);
+  });
+
   // ---------- Live polling so other users' changes appear ----------
   function startPolling(){
     pollTimer = setInterval(async () => {
@@ -1570,6 +2060,8 @@ ${scriptSrc}
     if(bulkBar) bulkBar.style.display = 'none';
     const exportBtn = document.getElementById('rg-export-btn');
     if(exportBtn) exportBtn.style.display = 'none';
+    const uploadBtn = document.getElementById('rg-upload-submission-btn');
+    if(uploadBtn) uploadBtn.style.display = 'none';
   }
 
   if(hasClaudeStorage){
