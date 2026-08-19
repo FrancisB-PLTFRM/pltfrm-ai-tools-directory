@@ -435,6 +435,21 @@
   }
   .rg-card-check-wrap{ display: flex; align-items: center; padding-top: 3px; }
   .rg-card-check{ accent-color: var(--black); width: 16px; height: 16px; cursor: pointer; }
+  .rg-suggest-edit-btn{
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-radius: 6px;
+    margin-top: 1px;
+  }
+  .rg-suggest-edit-btn:hover{ color: var(--black); background: rgba(255,255,255,0.06); }
+  .rg-suggest-edit-btn svg{ width: 13px; height: 13px; }
   .rg-card-title{
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -560,6 +575,22 @@
     color: var(--gray-500);
     display: inline-block;
   }
+  .rg-card-meta{ display: flex; flex-direction: column; gap: 3px; }
+  .rg-card-id-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    color: var(--gray-500);
+  }
+  .rg-card-id-btn:hover{ color: var(--black); }
+  .rg-card-id-btn svg{ width: 11px; height: 11px; flex-shrink: 0; }
   .rg-actions{ display: flex; gap: 6px; }
   .rg-icon-btn{
     background: transparent;
@@ -915,7 +946,7 @@
   // regenerates a copy of this file with the current entries baked into this
   // constant, so re-uploading it to GitHub preserves everyone's submissions
   // as the new starting point.
-  const SEED_ENTRIES = [{"id":"e_1784678015319_79k04q","title":"PLTFRM Catalyst","department":"Walmart","brand":"","description":"<div><div><b>Unified Walmart Hub<\/b><\/div><ol><li>Localized to browser/Keeps record of user's specific brands.&nbsp;&nbsp;<\/li><li>Weekly email generation.<\/li><li>WoW Performance Deep Dive<\/li><li>&nbsp;KW Analysis / Opportunity Finder (H10 copycat)<\/li><li>Slide Deck Creation.<\/li><li>Provide basic action items for media buyers for potential optimizations.<\/li><\/ol><\/div><div><br><\/div>","link":"https://pltfrm-catalyst.vercel.app/#","aiModel":"Claude","pointOfContact":"Dylan Smith","status":"active","createdAt":1784678015319,"updatedAt":1784746307985},{"id":"e_1784678238576_feo51v","title":"Amazon Ads Team Tools","department":"Amazon","brand":"","description":"Collection of Amazon AI Tools.","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"Claude","pointOfContact":"Hunter Garner/Ricky Grossman/Jamie Grossman","status":"active","createdAt":1784678238576,"updatedAt":1784678238576},{"id":"e_1784678351548_t0v2hp","title":"Daypart Analyzer","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Analyze your Amazon Ads performance by hour and day of week to find the best bid adjustment windows and cut spend during low-converting time slots.<\/span>","link":"https://hunterg-vendo.github.io/Daypart-Analyzer/","aiModel":"Claude","pointOfContact":"Hunter Garner","status":"active","createdAt":1784678351548,"updatedAt":1784678351548},{"id":"e_1784678495591_i2cn61","title":"Bulk Sheet Tool","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Fixes bulk sheet upload errors, organizes and manages portfolios, and builds new campaigns, ad groups, keywords, and targets — everything you need to create and clean up bulk files, all in one skill<\/span>","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"","pointOfContact":"Matan Laredo","status":"active","createdAt":1784678495591,"updatedAt":1784678532193},{"id":"e_1784678582470_vlytuu","title":"Brand Leakage Detector","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Reads keywords targeted in your B campaigns to build a brand dictionary, then scans every NB campaign search term for matches or close variants that are leaking spend or sales.<\/span>","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"Claude","pointOfContact":"Hunter Garner","status":"active","createdAt":1784678582470,"updatedAt":1784678582470},{"id":"e_1784678629705_156nyy","title":"WoW Dashboard","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A week-over-week performance comparison dashboard that analyzes campaign, product, and search term data across four report types — campaign reports, advertised product reports, business reports, and search query performance — highlighting WoW or MoM changes across revenue, spend, ROAS, CVR, and conversion metrics at the campaign, portfolio, and ASIN level.<\/span>","link":"https://rickygrossman5-wq.github.io/Advertising-Dashboard/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678629705,"updatedAt":1784678629705},{"id":"e_1784678665532_xfvj13","title":"Wasted Spend Miner","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A negative mining tool that analyzes your search term reports to surface wasted spend, score and rank negation candidates across auto, phrase, and broad campaigns, and identify high-value converting search terms you aren't explicitly targeting.<\/span>","link":"https://rickygrossman5-wq.github.io/Wasted-Spend/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678665532,"updatedAt":1784732581627},{"id":"e_1784678713607_qiwx0a","title":"Monthly Callouts Generator","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Generate polished monthly callout summaries fast — paste in your data and get client-ready performance highlights in seconds.<\/span>","link":"https://rickygrossman5-wq.github.io/Monthly-Callouts-Generator/","aiModel":"Claude","pointOfContact":"","status":"active","createdAt":1784678713607,"updatedAt":1784678713607},{"id":"e_1784678761834_e3cjbj","title":"DSP Media Plan","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A DSP media planning tool that predicts end-of-month spend for each line item and helps you allocate next month's budgets, then generates a ready-to-paste output for Amazon's AI ads chatbot to automatically update your projected spends.<\/span>","link":"https://rickygrossman5-wq.github.io/DSP-Media-Plan/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678761834,"updatedAt":1784678761834},{"id":"e_1784678797208_0s51xy","title":"CAC / Movement Tool","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A browser-based analytics tool for Amazon new-to-brand (NTB) campaign data: upload two months of AMC campaign reports to see month-over-month movement in spend, CAC, NTB sales, and ROAS — broken out by channel (PPC/DSP/Others) and category — plus a Sponsored Products deep-dive page that drills from each campaign down to its individual targets.<\/span>","link":"https://rickygrossman5-wq.github.io/CAC-MoM-Analyzer/","aiModel":"Claude","pointOfContact":"Jamie Grossman","status":"active","createdAt":1784678797208,"updatedAt":1784678797208},{"id":"e_1784732823458_nfgd0z","title":"Amazon Quarterly Category Benchmark Dashboard","department":"Amazon","brand":"","description":"Tool that analyzes brands through the context of category/sub-category performance. Compare brand performance Quarter over Quarter or Month over Month. Automatically provides callouts based on selected brands. Manually generate additional callouts based on your preferred metrics.","link":"https://share.gemini.google/CzO6XH3x3nCZ","aiModel":"Gemini","pointOfContact":"Francis Basco","status":"active","createdAt":1784732823458,"updatedAt":1784732823458}];
+  const SEED_ENTRIES = [{"id":"pltfrmdjxmsIyxkGokZW5A","title":"PLTFRM Catalyst","department":"Walmart","brand":"","description":"<div><div><b>Unified Walmart Hub<\/b><\/div><ol><li>Localized to browser/Keeps record of user's specific brands.&nbsp;&nbsp;<\/li><li>Weekly email generation.<\/li><li>WoW Performance Deep Dive<\/li><li>&nbsp;KW Analysis / Opportunity Finder (H10 copycat)<\/li><li>Slide Deck Creation.<\/li><li>Provide basic action items for media buyers for potential optimizations.<\/li><\/ol><\/div><div><br><\/div>","link":"https://pltfrm-catalyst.vercel.app/#","aiModel":"Claude","pointOfContact":"Dylan Smith","status":"active","createdAt":1784678015319,"updatedAt":1784746307985},{"id":"pltfrmBtNMFvCQFslmPRMM","title":"Amazon Ads Team Tools","department":"Amazon","brand":"","description":"Collection of Amazon AI Tools.","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"Claude","pointOfContact":"Hunter Garner/Ricky Grossman/Jamie Grossman","status":"active","createdAt":1784678238576,"updatedAt":1784678238576},{"id":"pltfrmQhCZcl8R8eikubqa","title":"Daypart Analyzer","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Analyze your Amazon Ads performance by hour and day of week to find the best bid adjustment windows and cut spend during low-converting time slots.<\/span>","link":"https://hunterg-vendo.github.io/Daypart-Analyzer/","aiModel":"Claude","pointOfContact":"Hunter Garner","status":"active","createdAt":1784678351548,"updatedAt":1784678351548},{"id":"pltfrmW28tjGdFKtFMsg75","title":"Bulk Sheet Tool","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Fixes bulk sheet upload errors, organizes and manages portfolios, and builds new campaigns, ad groups, keywords, and targets — everything you need to create and clean up bulk files, all in one skill<\/span>","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"","pointOfContact":"Matan Laredo","status":"active","createdAt":1784678495591,"updatedAt":1784678532193},{"id":"pltfrmpKg1yZ2kUhgNLT4s","title":"Brand Leakage Detector","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Reads keywords targeted in your B campaigns to build a brand dictionary, then scans every NB campaign search term for matches or close variants that are leaking spend or sales.<\/span>","link":"https://hunterg-vendo.github.io/Amazon-Ads-Team-Tools/","aiModel":"Claude","pointOfContact":"Hunter Garner","status":"active","createdAt":1784678582470,"updatedAt":1784678582470},{"id":"pltfrm0HU69exq7baUsc7H","title":"WoW Dashboard","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A week-over-week performance comparison dashboard that analyzes campaign, product, and search term data across four report types — campaign reports, advertised product reports, business reports, and search query performance — highlighting WoW or MoM changes across revenue, spend, ROAS, CVR, and conversion metrics at the campaign, portfolio, and ASIN level.<\/span>","link":"https://rickygrossman5-wq.github.io/Advertising-Dashboard/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678629705,"updatedAt":1784678629705},{"id":"pltfrm7azuc4asNsFmZ98l","title":"Wasted Spend Miner","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A negative mining tool that analyzes your search term reports to surface wasted spend, score and rank negation candidates across auto, phrase, and broad campaigns, and identify high-value converting search terms you aren't explicitly targeting.<\/span>","link":"https://rickygrossman5-wq.github.io/Wasted-Spend/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678665532,"updatedAt":1784732581627},{"id":"pltfrm9X1xpO0pyYSji8zd","title":"Monthly Callouts Generator","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">Generate polished monthly callout summaries fast — paste in your data and get client-ready performance highlights in seconds.<\/span>","link":"https://rickygrossman5-wq.github.io/Monthly-Callouts-Generator/","aiModel":"Claude","pointOfContact":"","status":"active","createdAt":1784678713607,"updatedAt":1784678713607},{"id":"pltfrmVJCtIMhVPCRSFL4V","title":"DSP Media Plan","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A DSP media planning tool that predicts end-of-month spend for each line item and helps you allocate next month's budgets, then generates a ready-to-paste output for Amazon's AI ads chatbot to automatically update your projected spends.<\/span>","link":"https://rickygrossman5-wq.github.io/DSP-Media-Plan/","aiModel":"Claude","pointOfContact":"Ricky Grossman","status":"active","createdAt":1784678761834,"updatedAt":1784678761834},{"id":"pltfrmW6le69mFHVOGOZqJ","title":"CAC / Movement Tool","department":"Amazon","brand":"","description":"<span style=\"font-size: 12px\">A browser-based analytics tool for Amazon new-to-brand (NTB) campaign data: upload two months of AMC campaign reports to see month-over-month movement in spend, CAC, NTB sales, and ROAS — broken out by channel (PPC/DSP/Others) and category — plus a Sponsored Products deep-dive page that drills from each campaign down to its individual targets.<\/span>","link":"https://rickygrossman5-wq.github.io/CAC-MoM-Analyzer/","aiModel":"Claude","pointOfContact":"Jamie Grossman","status":"active","createdAt":1784678797208,"updatedAt":1784678797208},{"id":"pltfrmubniLRoJZafZVKwa","title":"Amazon Quarterly Category Benchmark Dashboard","department":"Amazon","brand":"","description":"Dashboard that analyzes brands through the context of category/sub-category performance. Compare brand performance Quarter over Quarter or Month over Month. Automatically provides callouts based on selected brands. Manually generate additional callouts based on your preferred metrics.","link":"https://share.gemini.google/CzO6XH3x3nCZ","aiModel":"Gemini","pointOfContact":"Francis Basco","status":"active","createdAt":1784732823458,"updatedAt":1787105308867},{"id":"pltfrmjRQNo7cIptgKbCna","title":"Meta Dayparting","department":"Paid Search & Social","brand":"","description":"<div><div><div><div><div><div><div><div><p>The Meta Dayparting Tool analyzes ad performance by <strong>day of week and time of day<\/strong> to identify when campaigns are most efficient. Use these insights to optimize ad scheduling, shift budget toward high-performing periods, and reduce spend during weaker hours or days.<\/p><\/div><\/div><\/div><\/div><\/div><div><div><\/div><\/div><\/div><\/div><\/div><div><\/div>","link":"https://service-1-21-25-paid-search-social-ads-419312524422.asia-southeast1.run.app/","aiModel":"Gemini","pointOfContact":"Divya Pidaparti","status":"active","createdAt":1787108252224,"updatedAt":1787108252224},{"id":"pltfrmI2FXViJiKnFI2uDN","title":"Meta Interest Finder","department":"Paid Search & Social","brand":"","description":"Enter any brand URL. Get structured Meta Ads interest targeting research — audience themes, confidence scores, funnel mapping, and creative angles.","link":"https://pltfrm-meta-targets.manus.space/","aiModel":"Manus","pointOfContact":"Divya","status":"active","createdAt":1787108260320,"updatedAt":1787108260320}];
 
   // Controls whether add/edit/archive/delete/bulk-select and the Archive tab
   // are available. The Export button flips this to true in the downloaded
@@ -970,6 +1001,44 @@
 
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // Generates a static 16-character alphanumeric ID for an entry. Shown on
+  // each card so it can be copied and later used (via Submit New Tool's
+  // optional Entry ID field + Upload Submission) to edit that exact entry
+  // instead of creating a duplicate.
+  function generateEntryId(){
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const prefix = 'pltfrm';
+    const suffixLength = 16;
+    let suffix = '';
+    if(window.crypto && window.crypto.getRandomValues){
+      const arr = new Uint32Array(suffixLength);
+      window.crypto.getRandomValues(arr);
+      for(let i = 0; i < suffixLength; i++){ suffix += chars[arr[i] % chars.length]; }
+    } else {
+      for(let i = 0; i < suffixLength; i++){ suffix += chars[Math.floor(Math.random() * chars.length)]; }
+    }
+    return prefix + suffix;
+  }
+
+  function copyToClipboard(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); } catch(e){ /* ignore */ }
+    document.body.removeChild(ta);
   }
 
   function normalizeUrl(url){
@@ -1056,7 +1125,19 @@
       loaded = null;
     }
     entries = loaded || JSON.parse(JSON.stringify(SEED_ENTRIES));
+
+    // One-time migration: give any entry that predates this feature (or has
+    // a malformed id) a proper static 16-character alphanumeric ID.
+    let migrated = false;
+    entries.forEach(e => {
+      if(!e.id || !/^pltfrm[A-Za-z0-9]{16}$/.test(e.id)){
+        e.id = generateEntryId();
+        migrated = true;
+      }
+    });
+
     render();
+    if(migrated && !READONLY_MODE) await saveEntries();
   }
 
   async function saveEntries(){
@@ -1211,6 +1292,17 @@
           card.querySelector('.rg-restore-btn').addEventListener('click', () => restoreEntry(e.id));
           card.querySelector('.rg-delete-btn').addEventListener('click', () => confirmDeleteIds([e.id]));
         }
+      }
+      const suggestEditBtn = card.querySelector('.rg-suggest-edit-btn');
+      if(suggestEditBtn){
+        suggestEditBtn.addEventListener('click', () => openSuggestionModal(e));
+      }
+      const idBtn = card.querySelector('.rg-card-id-btn');
+      if(idBtn){
+        idBtn.addEventListener('click', () => {
+          copyToClipboard(idBtn.getAttribute('data-copy-id'));
+          toast('Entry ID copied');
+        });
       }
       const checkEl = card.querySelector('.rg-card-check');
       if(checkEl){
@@ -1439,6 +1531,9 @@
             <input type="checkbox" class="rg-card-check" data-id="${e.id}" aria-label="Select entry"${selectedIds.has(e.id) ? ' checked' : ''}>
           </div>`}
           <h3 class="rg-card-title">${safeTitle}${safeDept ? `<span class="rg-chip rg-chip-dept">${safeDept}</span>` : ''}${safeAiModel ? `<span class="rg-chip rg-chip-ai">${safeAiModel}</span>` : ''}</h3>
+          ${e.status !== 'removed' ? `<button type="button" class="rg-suggest-edit-btn" data-id="${e.id}" title="Suggest an edit to this entry" aria-label="Suggest an edit to this entry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </button>` : ''}
         </div>
         ${safeBrand ? `<div class="rg-tag-row">
           <span class="rg-chip rg-chip-outline">${safeBrand}</span>
@@ -1448,7 +1543,13 @@
         ${safePoc ? `<div class="rg-card-poc"><span class="rg-card-poc-label">Point of Contact</span> ${safePoc}</div>` : ''}
         ${safeLink ? `<div class="rg-card-link-row"><a href="${safeLink}" target="_blank" rel="noopener noreferrer">Access ↗</a></div>` : ''}
         <div class="rg-card-bottom">
-          <span class="rg-stamp">${stampLabel}</span>
+          <div class="rg-card-meta">
+            <button type="button" class="rg-card-id-btn" data-copy-id="${e.id}" title="Copy entry ID">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="rg-card-id-text">${e.id}</span>
+            </button>
+            <span class="rg-stamp">${stampLabel}</span>
+          </div>
           <div class="rg-actions">${actions}</div>
         </div>
       </div>`;
@@ -1538,7 +1639,7 @@
 
   // ---------- Modal: add/edit ----------
   document.getElementById('rg-new-entry-btn').addEventListener('click', () => openModal(null));
-  document.getElementById('rg-submit-tool-btn').addEventListener('click', () => openSubmitModal());
+  document.getElementById('rg-submit-tool-btn').addEventListener('click', () => openSuggestionModal(null));
 
   function openModal(id){
     editingId = id;
@@ -1650,7 +1751,7 @@
       toast('Entry updated');
     } else {
       entries.push({
-        id: 'e_' + now + '_' + Math.random().toString(36).slice(2,8),
+        id: generateEntryId(),
         title, department, brand, description, link, aiModel, pointOfContact,
         status: 'active',
         createdAt: now,
@@ -1665,7 +1766,7 @@
 
   // ---------- Submit New Tool: exports a submission as a templated CSV ----------
   // Column order is fixed and must match what Upload Submission expects.
-  const SUBMISSION_CSV_HEADERS = ['Title', 'Department', 'Brand', 'AI Model', 'Point of Contact', 'Link', 'Description', 'Submitted At'];
+  const SUBMISSION_CSV_HEADERS = ['Entry ID', 'Title', 'Department', 'Brand', 'AI Model', 'Point of Contact', 'Link', 'Description', 'Submitted At'];
 
   function csvEscape(value){
     const str = String(value == null ? '' : value);
@@ -1677,7 +1778,7 @@
 
   function buildSubmissionCsv(sub){
     const row = [
-      sub.title, sub.department, sub.brand, sub.aiModel,
+      sub.entryId, sub.title, sub.department, sub.brand, sub.aiModel,
       sub.pointOfContact, sub.link, sub.description,
       new Date(sub.submittedAt).toLocaleString()
     ];
@@ -1717,8 +1818,9 @@
     return rows.filter(r => !(r.length === 1 && r[0].trim() === ''));
   }
 
-  function openSubmitModal(){
+  function openSuggestionModal(entry){
     modalOpen = true;
+    const isEdit = !!entry;
     const deptOptions = distinctFieldValues('department');
     const aiModelOptions = distinctFieldValues('aiModel');
 
@@ -1728,22 +1830,24 @@
     overlay.innerHTML = `
       <div class="rg-modal" role="dialog" aria-modal="true">
         <div class="rg-modal-header">
-          <h2>Submit a new tool</h2>
+          <h2>${isEdit ? 'Suggest an edit' : 'Submit a new tool'}</h2>
           <button type="button" class="rg-modal-close" id="rg-modal-close" aria-label="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
-        <p style="font-size:13px; color: var(--gray-500); margin: 0 0 14px;">This downloads a file for the Directory Operator to review — it won't appear in the list until they add it.</p>
+        <p style="font-size:13px; color: var(--gray-500); margin: 0 0 14px;">${isEdit
+          ? `This downloads a file for the Directory Operator to review — the changes won\u2019t appear in the list until they\u2019re approved.`
+          : `This downloads a file for the Directory Operator to review — it won't appear in the list until they add it.`}</p>
         <div class="rg-field">
           <label for="rg-submit-input-title">Title</label>
-          <input id="rg-submit-input-title" type="text" maxlength="120" placeholder="Give it a clear name" />
+          <input id="rg-submit-input-title" type="text" maxlength="120" placeholder="Give it a clear name" value="${isEdit ? escapeHtml(entry.title) : ''}" />
           <div class="rg-field-error" id="rg-submit-title-error"></div>
         </div>
-        ${buildComboFieldHtml('rg-submit-dept-field', 'Department', deptOptions, '')}
-        ${buildComboFieldHtml('rg-submit-aimodel-field', 'AI Model', aiModelOptions, '')}
+        ${buildComboFieldHtml('rg-submit-dept-field', 'Department', deptOptions, isEdit ? (entry.department || '') : '')}
+        ${buildComboFieldHtml('rg-submit-aimodel-field', 'AI Model', aiModelOptions, isEdit ? (entry.aiModel || '') : '')}
         <div class="rg-field">
           <label for="rg-submit-input-brand">Brand <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
-          <input id="rg-submit-input-brand" type="text" maxlength="80" placeholder="Include if brand-specific" />
+          <input id="rg-submit-input-brand" type="text" maxlength="80" placeholder="Include if brand-specific" value="${isEdit ? escapeHtml(entry.brand || '') : ''}" />
         </div>
         <div class="rg-field">
           <label for="rg-submit-input-desc">Description</label>
@@ -1755,19 +1859,20 @@
             <button type="button" class="rg-rte-btn" data-cmd="insertUnorderedList" title="Bullet list">&#8226; List</button>
             <button type="button" class="rg-rte-btn" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
           </div>
-          <div id="rg-submit-input-desc" class="rg-rte-editor" contenteditable="true" data-placeholder="What is this?"></div>
+          <div id="rg-submit-input-desc" class="rg-rte-editor" contenteditable="true" data-placeholder="What is this?">${isEdit ? sanitizeRichHtml(entry.description || '') : ''}</div>
         </div>
         <div class="rg-field">
           <label for="rg-submit-input-link">Link</label>
-          <input id="rg-submit-input-link" type="text" maxlength="500" placeholder="https://…" />
+          <input id="rg-submit-input-link" type="text" maxlength="500" placeholder="https://…" value="${isEdit ? escapeHtml(entry.link || '') : ''}" />
         </div>
         <div class="rg-field">
           <label for="rg-submit-input-poc">Point of Contact <span style="text-transform:none; font-weight:400; color: var(--gray-500);">(optional)</span></label>
-          <input id="rg-submit-input-poc" type="text" maxlength="120" placeholder="Name or email" />
+          <input id="rg-submit-input-poc" type="text" maxlength="120" placeholder="Name or email" value="${isEdit ? escapeHtml(entry.pointOfContact || '') : ''}" />
         </div>
+        ${isEdit ? `<p style="font-size:11.5px; color: var(--gray-500); margin: 0 0 4px; font-family:'SFMono-Regular', Menlo, Consolas, monospace;">Editing entry ${escapeHtml(entry.id)}</p>` : ''}
         <div class="rg-modal-actions">
           <button class="rg-btn secondary" id="rg-modal-cancel">Cancel</button>
-          <button class="rg-btn primary" id="rg-modal-save">Submit for review</button>
+          <button class="rg-btn primary" id="rg-modal-save">${isEdit ? 'Submit edit for review' : 'Submit for review'}</button>
         </div>
       </div>`;
     document.body.appendChild(overlay);
@@ -1781,11 +1886,11 @@
 
     document.getElementById('rg-modal-cancel').addEventListener('click', closeModal);
     document.getElementById('rg-modal-close').addEventListener('click', closeModal);
-    document.getElementById('rg-modal-save').addEventListener('click', saveSubmitModal);
+    document.getElementById('rg-modal-save').addEventListener('click', () => saveSuggestionModal(isEdit ? entry.id : ''));
     document.getElementById('rg-submit-input-title').focus();
   }
 
-  function saveSubmitModal(){
+  function saveSuggestionModal(entryId){
     const title = document.getElementById('rg-submit-input-title').value.trim();
     const department = getComboValue('rg-submit-dept-field');
     const brand = document.getElementById('rg-submit-input-brand').value.trim();
@@ -1803,7 +1908,7 @@
     errorEl.textContent = '';
 
     const submission = {
-      title, department, brand, description, link, aiModel, pointOfContact,
+      entryId, title, department, brand, description, link, aiModel, pointOfContact,
       submittedAt: Date.now()
     };
 
@@ -1850,6 +1955,7 @@
 
     const header = rows[0];
     const idx = {
+      entryId: findSubmissionColumnIndex(header, 'Entry ID'),
       title: findSubmissionColumnIndex(header, 'Title'),
       department: findSubmissionColumnIndex(header, 'Department'),
       brand: findSubmissionColumnIndex(header, 'Brand'),
@@ -1865,32 +1971,54 @@
     }
 
     let added = 0;
+    let updated = 0;
+    let notFound = 0;
     const now = Date.now();
     rows.slice(1).forEach(r => {
       const title = (r[idx.title] || '').trim();
       if(!title) return;
-      entries.push({
-        id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '_' + added,
+
+      const fields = {
         title,
         department: idx.department > -1 ? (r[idx.department] || '').trim() : '',
         brand: idx.brand > -1 ? (r[idx.brand] || '').trim() : '',
         description: idx.description > -1 ? sanitizeRichHtml(r[idx.description] || '') : '',
         link: idx.link > -1 ? (r[idx.link] || '').trim() : '',
         aiModel: idx.aiModel > -1 ? (r[idx.aiModel] || '').trim() : '',
-        pointOfContact: idx.pointOfContact > -1 ? (r[idx.pointOfContact] || '').trim() : '',
-        status: 'active',
-        createdAt: now,
-        updatedAt: now
-      });
-      added++;
+        pointOfContact: idx.pointOfContact > -1 ? (r[idx.pointOfContact] || '').trim() : ''
+      };
+
+      const requestedId = idx.entryId > -1 ? (r[idx.entryId] || '').trim() : '';
+      const existing = requestedId ? entries.find(e => e.id === requestedId) : null;
+
+      if(existing){
+        Object.assign(existing, fields);
+        existing.updatedAt = now;
+        updated++;
+      } else {
+        if(requestedId) notFound++;
+        entries.push({
+          id: generateEntryId(),
+          ...fields,
+          status: 'active',
+          createdAt: now,
+          updatedAt: now
+        });
+        added++;
+      }
     });
 
-    if(added === 0){
+    if(added === 0 && updated === 0){
       toast('No valid entries found in that file');
       return;
     }
     render();
-    toast(`${added} ${added === 1 ? 'entry' : 'entries'} imported from submission`);
+    const parts = [];
+    if(updated > 0) parts.push(`${updated} ${updated === 1 ? 'entry' : 'entries'} updated`);
+    if(added > 0) parts.push(`${added} new ${added === 1 ? 'entry' : 'entries'} added`);
+    let message = parts.join(', ');
+    if(notFound > 0) message += ` (${notFound} referenced an ID that wasn't found, so ${notFound === 1 ? 'it was' : 'they were'} added as new)`;
+    toast(message);
     await saveEntries();
   }
 
