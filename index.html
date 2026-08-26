@@ -452,6 +452,16 @@
   .rg-suggest-edit-btn svg{ width: 13px; height: 13px; }
   #registry-root.is-readonly .rg-suggest-edit-btn{ color: #FFFFFF; }
   #registry-root.is-readonly .rg-suggest-edit-btn svg{ width: 15px; height: 15px; stroke-width: 2.5; }
+
+  /* In the Editable Dashboard, Share and Suggest-an-edit are Static Dashboard
+     concepts and would break things if clicked here, so they're disabled. */
+  #registry-root:not(.is-readonly) .rg-suggest-edit-btn,
+  #registry-root:not(.is-readonly) .rg-share-btn,
+  #registry-root:not(.is-readonly) #rg-share-dashboard-btn{
+    opacity: 0.32;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
   .rg-card-title{
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -1438,7 +1448,10 @@
       }
       const suggestEditBtn = card.querySelector('.rg-suggest-edit-btn');
       if(suggestEditBtn){
-        suggestEditBtn.addEventListener('click', () => openSuggestionModal(e));
+        suggestEditBtn.addEventListener('click', () => {
+          if(!READONLY_MODE) return;
+          openSuggestionModal(e);
+        });
       }
       const idBtn = card.querySelector('.rg-card-id-btn');
       if(idBtn){
@@ -1450,6 +1463,7 @@
       const shareBtn = card.querySelector('[data-share-id]');
       if(shareBtn){
         shareBtn.addEventListener('click', () => {
+          if(!READONLY_MODE) return;
           const targetId = shareBtn.getAttribute('data-share-id');
           const url = window.location.href.split('#')[0] + '#entry=' + encodeURIComponent(targetId);
           copyToClipboard(url);
@@ -1676,7 +1690,7 @@
             <input type="checkbox" class="rg-card-check" data-id="${e.id}" aria-label="Select entry"${selectedIds.has(e.id) ? ' checked' : ''}>
           </div>`}
           <h3 class="rg-card-title">${safeTitle}${safeDept ? `<span class="rg-chip rg-chip-dept">${safeDept}</span>` : ''}${safeAiModel ? `<span class="rg-chip rg-chip-ai">${safeAiModel}</span>` : ''}</h3>
-          ${e.status !== 'removed' ? `<button type="button" class="rg-suggest-edit-btn" data-id="${e.id}" title="Suggest an edit to this entry" aria-label="Suggest an edit to this entry">
+          ${e.status !== 'removed' ? `<button type="button" class="rg-suggest-edit-btn" data-id="${e.id}" title="${READONLY_MODE ? 'Suggest an edit to this entry' : 'Only available in the Static Dashboard (exported version)'}" aria-label="Suggest an edit to this entry"${READONLY_MODE ? '' : ' tabindex="-1" aria-disabled="true"'}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           </button>` : ''}
         </div>
@@ -1699,7 +1713,7 @@
             <span class="rg-stamp">${stampLabel}</span>
           </div>
           <div class="rg-card-bottom-right">
-            ${e.status !== 'removed' ? `<button type="button" class="rg-share-btn" data-share-id="${e.id}" title="Share a direct link to this entry">
+            ${e.status !== 'removed' ? `<button type="button" class="rg-share-btn" data-share-id="${e.id}" title="${READONLY_MODE ? 'Share a direct link to this entry' : 'Only available in the Static Dashboard (exported version)'}"${READONLY_MODE ? '' : ' tabindex="-1" aria-disabled="true"'}>
               Share
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             </button>` : ''}
@@ -2334,6 +2348,7 @@ ${scriptSrc}
   }
 
   document.getElementById('rg-share-dashboard-btn').addEventListener('click', () => {
+    if(!READONLY_MODE) return;
     const url = window.location.href.split('#')[0];
     const shareTitle = document.querySelector('.rg-title') ? document.querySelector('.rg-title').textContent.trim() : 'AI Directory';
     if(navigator.share){
@@ -2383,6 +2398,13 @@ ${scriptSrc}
     if(exportBtn) exportBtn.style.display = 'none';
     const uploadBtn = document.getElementById('rg-upload-submission-btn');
     if(uploadBtn) uploadBtn.style.display = 'none';
+  } else {
+    const dashShareBtn = document.getElementById('rg-share-dashboard-btn');
+    if(dashShareBtn){
+      dashShareBtn.title = 'Only available in the Static Dashboard (exported version)';
+      dashShareBtn.setAttribute('aria-disabled', 'true');
+      dashShareBtn.setAttribute('tabindex', '-1');
+    }
   }
 
   if(hasClaudeStorage){
