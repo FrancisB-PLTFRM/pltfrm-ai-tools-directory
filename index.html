@@ -586,7 +586,24 @@
     display: inline-block;
   }
   .rg-card-meta{ display: flex; flex-direction: column; gap: 3px; }
-  .rg-card-meta-row{ display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .rg-card-bottom-right{ display: flex; align-items: center; gap: 8px; }
+  .rg-share-btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .rg-share-btn:hover{ opacity: 0.8; }
+  .rg-share-btn svg{ width: 12px; height: 12px; }
   .rg-card-id-btn{
     display: inline-flex;
     align-items: center;
@@ -1362,13 +1379,18 @@
           toast('Entry ID copied');
         });
       }
-      const linkBtn = card.querySelector('[data-copy-link]');
-      if(linkBtn){
-        linkBtn.addEventListener('click', () => {
-          const targetId = linkBtn.getAttribute('data-copy-link');
+      const shareBtn = card.querySelector('[data-share-id]');
+      if(shareBtn){
+        shareBtn.addEventListener('click', () => {
+          const targetId = shareBtn.getAttribute('data-share-id');
           const url = window.location.href.split('#')[0] + '#entry=' + encodeURIComponent(targetId);
-          copyToClipboard(url);
-          toast('Link copied');
+          const shareTitle = (entries.find(en => en.id === targetId) || {}).title || 'Entry';
+          if(navigator.share){
+            navigator.share({ title: shareTitle, url }).catch(() => {});
+          } else {
+            copyToClipboard(url);
+            toast('Link copied');
+          }
         });
       }
       const checkEl = card.querySelector('.rg-card-check');
@@ -1607,19 +1629,19 @@
         </div>` : ''}
         <div class="rg-card-bottom">
           <div class="rg-card-meta">
-            <div class="rg-card-meta-row">
-              <button type="button" class="rg-card-id-btn" data-copy-id="${e.id}" title="Copy entry ID">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span class="rg-card-id-text">${e.id}</span>
-              </button>
-              ${e.status !== 'removed' ? `<button type="button" class="rg-card-id-btn" data-copy-link="${e.id}" title="Copy a direct link to this entry">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                <span class="rg-card-id-text">Link</span>
-              </button>` : ''}
-            </div>
+            <button type="button" class="rg-card-id-btn" data-copy-id="${e.id}" title="Copy entry ID">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="rg-card-id-text">${e.id}</span>
+            </button>
             <span class="rg-stamp">${stampLabel}</span>
           </div>
-          <div class="rg-actions">${actions}</div>
+          <div class="rg-card-bottom-right">
+            ${e.status !== 'removed' ? `<button type="button" class="rg-share-btn" data-share-id="${e.id}" title="Share a direct link to this entry">
+              Share
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </button>` : ''}
+            <div class="rg-actions">${actions}</div>
+          </div>
         </div>
       </div>`;
   }
