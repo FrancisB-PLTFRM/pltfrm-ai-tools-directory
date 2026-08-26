@@ -586,6 +586,7 @@
     display: inline-block;
   }
   .rg-card-meta{ display: flex; flex-direction: column; gap: 3px; }
+  .rg-card-meta-row{ display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .rg-card-id-btn{
     display: inline-flex;
     align-items: center;
@@ -1056,6 +1057,48 @@
     document.body.removeChild(ta);
   }
 
+  // ---------- Deep links: #entry=<id> lets a submission be linked to directly ----------
+  function setEntryHash(id){
+    try{ history.replaceState(null, '', '#entry=' + encodeURIComponent(id)); } catch(e){ /* ignore */ }
+  }
+
+  function scrollToAndFlashCard(id){
+    requestAnimationFrame(() => {
+      const card = document.getElementById('card-' + id);
+      if(card){
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('rg-card-flash');
+        setTimeout(() => card.classList.remove('rg-card-flash'), 1500);
+      }
+    });
+  }
+
+  function goToEntry(id, { updateHash } = { updateHash: true }){
+    const target = entries.find(e => e.id === id && e.status !== 'removed');
+    if(!target) return false;
+    viewMode = 'category';
+    document.getElementById('rg-view-category').classList.add('active');
+    document.getElementById('rg-view-list').classList.remove('active');
+    document.getElementById('rg-view-grid').classList.remove('active');
+    currentTab = 'active';
+    document.getElementById('rg-tab-active').classList.add('active');
+    document.getElementById('rg-tab-removed').classList.remove('active');
+    categoryDept = (target.department || '').trim() || 'Uncategorized';
+    collapsedDepts.delete(categoryDept);
+    resetPage();
+    render();
+    scrollToAndFlashCard(id);
+    if(updateHash) setEntryHash(id);
+    return true;
+  }
+
+  function applyDeepLinkFromHash(){
+    const match = /^#entry=(.+)$/.exec(window.location.hash);
+    if(!match) return;
+    const id = decodeURIComponent(match[1]);
+    goToEntry(id, { updateHash: false });
+  }
+
   function normalizeUrl(url){
     if(!url) return '';
     if(!/^https?:\/\//i.test(url)) return 'https://' + url;
@@ -1319,6 +1362,15 @@
           toast('Entry ID copied');
         });
       }
+      const linkBtn = card.querySelector('[data-copy-link]');
+      if(linkBtn){
+        linkBtn.addEventListener('click', () => {
+          const targetId = linkBtn.getAttribute('data-copy-link');
+          const url = window.location.href.split('#')[0] + '#entry=' + encodeURIComponent(targetId);
+          copyToClipboard(url);
+          toast('Link copied');
+        });
+      }
       const checkEl = card.querySelector('.rg-card-check');
       if(checkEl){
         checkEl.addEventListener('change', () => {
@@ -1405,20 +1457,8 @@
     });
     categorySidebarEl.querySelectorAll('.rg-toc-entry').forEach(el => {
       el.addEventListener('click', () => {
-        const dept = el.getAttribute('data-dept');
         const id = el.getAttribute('data-id');
-        categoryDept = dept;
-        collapsedDepts.delete(dept);
-        resetPage();
-        render();
-        requestAnimationFrame(() => {
-          const card = document.getElementById('card-' + id);
-          if(card){
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            card.classList.add('rg-card-flash');
-            setTimeout(() => card.classList.remove('rg-card-flash'), 1500);
-          }
-        });
+        goToEntry(id);
       });
     });
   }
@@ -1567,10 +1607,16 @@
         </div>` : ''}
         <div class="rg-card-bottom">
           <div class="rg-card-meta">
-            <button type="button" class="rg-card-id-btn" data-copy-id="${e.id}" title="Copy entry ID">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span class="rg-card-id-text">${e.id}</span>
-            </button>
+            <div class="rg-card-meta-row">
+              <button type="button" class="rg-card-id-btn" data-copy-id="${e.id}" title="Copy entry ID">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="rg-card-id-text">${e.id}</span>
+              </button>
+              ${e.status !== 'removed' ? `<button type="button" class="rg-card-id-btn" data-copy-link="${e.id}" title="Copy a direct link to this entry">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <span class="rg-card-id-text">Link</span>
+              </button>` : ''}
+            </div>
             <span class="rg-stamp">${stampLabel}</span>
           </div>
           <div class="rg-actions">${actions}</div>
@@ -2243,14 +2289,14 @@ ${scriptSrc}
   }
 
   if(hasClaudeStorage){
-    loadEntries().then(startPolling);
+    loadEntries().then(() => { applyDeepLinkFromHash(); startPolling(); });
   } else {
     document.querySelector('.rg-eyebrow').textContent = READONLY_MODE
       ? 'A directory of shared AI tools'
       : 'Saved in this browser — use Export to update the shared file';
     // Standalone / GitHub Pages mode: entries persist in this browser via
     // localStorage. Keep other open tabs on the same device in sync too.
-    loadEntries();
+    loadEntries().then(() => applyDeepLinkFromHash());
     window.addEventListener('storage', (ev) => {
       if(ev.key === STORAGE_KEY && !modalOpen){
         loadEntries();
