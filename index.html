@@ -1008,6 +1008,12 @@
   </div>
 </div>
 <div id="rg-toast" class="rg-toast"></div>
+<button type="button" class="rg-back-to-top" id="rg-back-to-top" aria-label="Return to top" title="Return to top">
+  <span class="rg-back-to-top-circle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+  </span>
+  <span class="rg-back-to-top-label">Back to Top</span>
+</button>
 <script>
 
 (function(){
@@ -1017,6 +1023,7 @@
   const PRISTINE_STYLE_HTML = document.querySelector('style') ? document.querySelector('style').outerHTML : '';
   const PRISTINE_ROOT_HTML = document.getElementById('registry-root').outerHTML;
   const PRISTINE_TOAST_HTML = document.getElementById('rg-toast').outerHTML;
+  const PRISTINE_BACKTOTOP_HTML = document.getElementById('rg-back-to-top') ? document.getElementById('rg-back-to-top').outerHTML : '';
 
   // Seed data baked into the file. Left empty here; the Export button below
   // regenerates a copy of this file with the current entries baked into this
@@ -1161,15 +1168,17 @@
 
   // ---------- Return to Top ----------
   const backToTopEl = document.getElementById('rg-back-to-top');
-  function updateBackToTopVisibility(){
-    backToTopEl.classList.toggle('visible', window.scrollY > 400);
+  if(backToTopEl){
+    function updateBackToTopVisibility(){
+      backToTopEl.classList.toggle('visible', window.scrollY > 400);
+    }
+    window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
+    updateBackToTopVisibility();
+    backToTopEl.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try{ history.replaceState(null, '', window.location.pathname + window.location.search); } catch(e){ /* ignore */ }
+    });
   }
-  window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
-  updateBackToTopVisibility();
-  backToTopEl.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    try{ history.replaceState(null, '', window.location.pathname + window.location.search); } catch(e){ /* ignore */ }
-  });
 
   function normalizeUrl(url){
     if(!url) return '';
@@ -2297,6 +2306,7 @@
 ${PRISTINE_STYLE_HTML}
 ${PRISTINE_ROOT_HTML}
 ${PRISTINE_TOAST_HTML}
+${PRISTINE_BACKTOTOP_HTML}
 <script>
 ${scriptSrc}
 </scr` + `ipt>
