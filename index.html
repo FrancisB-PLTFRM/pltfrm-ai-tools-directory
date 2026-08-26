@@ -852,6 +852,49 @@
   }
   .rg-toast.show{ opacity: 1; }
 
+  .rg-back-to-top{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 90;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  }
+  .rg-back-to-top-circle{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .rg-back-to-top-label{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    text-align: center;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+  .rg-back-to-top.visible{ opacity: 1; visibility: visible; transform: translateY(0); }
+  .rg-back-to-top:hover .rg-back-to-top-circle{ opacity: 0.82; }
+  .rg-back-to-top svg{ width: 18px; height: 18px; flex-shrink: 0; }
+
   @media (max-width: 520px){
     .rg-title{ font-size: 24px; }
     .rg-toolbar{ flex-direction: column; align-items: stretch; }
@@ -1115,6 +1158,18 @@
     const id = decodeURIComponent(match[1]);
     goToEntry(id, { updateHash: false });
   }
+
+  // ---------- Return to Top ----------
+  const backToTopEl = document.getElementById('rg-back-to-top');
+  function updateBackToTopVisibility(){
+    backToTopEl.classList.toggle('visible', window.scrollY > 400);
+  }
+  window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
+  updateBackToTopVisibility();
+  backToTopEl.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try{ history.replaceState(null, '', window.location.pathname + window.location.search); } catch(e){ /* ignore */ }
+  });
 
   function normalizeUrl(url){
     if(!url) return '';
