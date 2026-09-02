@@ -403,7 +403,12 @@
   }
   .rg-toc-entry:hover{ color: var(--black); background: rgba(255,255,255,0.06); }
 
-  .rg-card.rg-card-flash{ border-color: var(--black); box-shadow: 0 0 0 2px var(--black); }
+  @keyframes rg-card-blink {
+    0%, 35%, 70%, 100% { border-color: var(--black); box-shadow: 0 0 0 2px var(--black); }
+    15%, 50% { border-color: var(--line); box-shadow: none; }
+  }
+  .rg-card.rg-card-flash{ animation: rg-card-blink 1.1s ease-in-out; }
+  .rg-card.rg-card-selected{ border-color: var(--black); box-shadow: 0 0 0 2px var(--black); }
 
   @media (max-width: 860px){
     #registry-inner.category-mode{ max-width: 780px; }
@@ -1070,6 +1075,7 @@
   let searchQuery = '';
   let searchField = 'title';
   let categoryDept = null;
+  let highlightedEntryId = null;
   const collapsedDepts = new Set();
 
   const listEl = document.getElementById('rg-list');
@@ -1143,13 +1149,29 @@
     try{ history.replaceState(null, '', '#entry=' + encodeURIComponent(id)); } catch(e){ /* ignore */ }
   }
 
+  function clearCardHighlight(){
+    if(!highlightedEntryId) return;
+    const prevId = highlightedEntryId;
+    highlightedEntryId = null;
+    const prevCard = document.getElementById('card-' + prevId);
+    if(prevCard){
+      prevCard.classList.remove('rg-card-selected');
+      prevCard.classList.remove('rg-card-flash');
+    }
+  }
+
   function scrollToAndFlashCard(id){
     requestAnimationFrame(() => {
       const card = document.getElementById('card-' + id);
       if(card){
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        highlightedEntryId = id;
+        card.classList.add('rg-card-selected');
         card.classList.add('rg-card-flash');
-        setTimeout(() => card.classList.remove('rg-card-flash'), 1500);
+        card.addEventListener('animationend', function onEnd(){
+          card.classList.remove('rg-card-flash');
+          card.removeEventListener('animationend', onEnd);
+        });
       }
     });
   }
@@ -1157,6 +1179,7 @@
   function goToEntry(id, { updateHash } = { updateHash: true }){
     const target = entries.find(e => e.id === id && e.status !== 'removed');
     if(!target) return false;
+    clearCardHighlight();
     viewMode = 'category';
     document.getElementById('rg-view-category').classList.add('active');
     document.getElementById('rg-view-list').classList.remove('active');
@@ -1191,6 +1214,10 @@
     backToTopEl.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       try{ history.replaceState(null, '', window.location.pathname + window.location.search); } catch(e){ /* ignore */ }
+      if(highlightedEntryId){
+        clearCardHighlight();
+        render();
+      }
     });
   }
 
@@ -1645,6 +1672,7 @@
     if(viewMode === mode) return;
     viewMode = mode;
     resetPage();
+    clearCardHighlight();
     document.getElementById('rg-view-category').classList.toggle('active', mode === 'category');
     document.getElementById('rg-view-list').classList.toggle('active', mode === 'list');
     document.getElementById('rg-view-grid').classList.toggle('active', mode === 'grid');
@@ -1684,7 +1712,7 @@
          </button>`);
 
     return `
-      <div class="rg-card ${e.status === 'removed' ? 'removed' : ''}" id="card-${e.id}">
+      <div class="rg-card ${e.status === 'removed' ? 'removed' : ''}${e.id === highlightedEntryId ? ' rg-card-selected' : ''}" id="card-${e.id}">
         <div class="rg-card-top">
           ${READONLY_MODE ? '' : `<div class="rg-card-check-wrap">
             <input type="checkbox" class="rg-card-check" data-id="${e.id}" aria-label="Select entry"${selectedIds.has(e.id) ? ' checked' : ''}>
