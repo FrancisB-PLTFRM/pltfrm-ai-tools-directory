@@ -343,15 +343,17 @@
   .rg-category-sidebar{ display: none; }
   .rg-list-area{ flex: 1; min-width: 0; }
 
-  #registry-inner.category-mode .rg-category-sidebar{
-    display: block;
-    width: 220px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 20px;
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    padding-right: 6px;
+  @media (min-width: 861px){
+    #registry-inner.category-mode .rg-category-sidebar{
+      display: block;
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding-right: 6px;
+    }
   }
 
   .rg-toc-dept{ margin-bottom: 4px; }
@@ -412,9 +414,79 @@
 
   @media (max-width: 860px){
     #registry-inner.category-mode{ max-width: 780px; }
-    .rg-category-sidebar{ display: none !important; }
+    #registry-inner.category-mode .rg-mobile-toc-toggle{ display: flex; }
+    .rg-category-sidebar{ display: none; }
     .rg-category-layout{ display: block; }
+    .rg-category-sidebar.mobile-open{
+      display: none;
+    }
+    #registry-inner.category-mode .rg-category-sidebar.mobile-open{
+      display: block;
+      position: fixed;
+      top: 103px;
+      left: 16px;
+      width: 280px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 123px);
+      overflow-y: auto;
+      background: rgba(20,20,20,0.86);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+      z-index: 140;
+    }
   }
+
+  .rg-mobile-toc-toggle{
+    display: none;
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    z-index: 90;
+    background: rgba(10,10,10,0.62);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 8px 10px 7px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .rg-mobile-toc-toggle-circle{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    transition: background .15s ease, color .15s ease;
+  }
+  .rg-mobile-toc-toggle.active .rg-mobile-toc-toggle-circle{
+    background: transparent;
+    color: var(--black);
+    border: 2px solid var(--black);
+  }
+  .rg-mobile-toc-toggle-label{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+  .rg-mobile-toc-toggle svg{ width: 18px; height: 18px; }
 
   .rg-card{
     background: var(--surface);
@@ -919,6 +991,12 @@
 </style>
 <div id="registry-root">
   <div id="registry-inner">
+    <button type="button" class="rg-mobile-toc-toggle" id="rg-mobile-toc-toggle" aria-label="Toggle directory" title="Toggle directory">
+      <span class="rg-mobile-toc-toggle-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="6" y1="12" x2="21" y2="12"></line><line x1="6" y1="18" x2="21" y2="18"></line></svg>
+      </span>
+      <span class="rg-mobile-toc-toggle-label">Directory</span>
+    </button>
     <div class="rg-header">
       <div class="rg-header-text">
         <p class="rg-eyebrow">Shared &amp; live — everyone sees the same log</p>
@@ -1204,6 +1282,18 @@
   }
 
   // ---------- Return to Top ----------
+  const mobileTocToggleEl = document.getElementById('rg-mobile-toc-toggle');
+  if(mobileTocToggleEl){
+    mobileTocToggleEl.addEventListener('click', () => {
+      const isOpen = categorySidebarEl.classList.toggle('mobile-open');
+      mobileTocToggleEl.classList.toggle('active', isOpen);
+    });
+  }
+  function closeMobileToc(){
+    if(categorySidebarEl) categorySidebarEl.classList.remove('mobile-open');
+    if(mobileTocToggleEl) mobileTocToggleEl.classList.remove('active');
+  }
+
   const backToTopEl = document.getElementById('rg-back-to-top');
   if(backToTopEl){
     function updateBackToTopVisibility(){
@@ -1579,12 +1669,14 @@
         collapsedDepts.delete(dept);
         resetPage();
         render();
+        closeMobileToc();
       });
     });
     categorySidebarEl.querySelectorAll('.rg-toc-entry').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.getAttribute('data-id');
         goToEntry(id);
+        closeMobileToc();
       });
     });
   }
